@@ -1,0 +1,156 @@
+{
+	"user": {
+        "userID": "21372137",
+        "username": "Ziomal Ziomal",
+        "lastUpdated": "23:11:56 11.03.2020",
+		"numberOfCollections": "3",
+		"collections": [{
+				"colID": "1",
+				"collectionName": "Ranczo w Texasie",
+				"numberOfDevices": "2",
+				"lastStateChange": "20:11:56 11.03.2020",
+				"devices": [{
+						"devID": "1",
+						"deviceName": "Brama",
+						"isClosed": "False",
+						"lastStateChange": "20:11:56 11.03.2020"
+					},
+					{
+						"devID": "2",
+						"deviceName": "Stodoła",
+						"isClosed": "True",
+						"lastStateChange": "09:55:33 11.03.2020"
+					}
+				]
+			},
+			{
+				"colID": "2",
+				"collectionName": "Dom w Krakowie",
+				"numberOfDevices": "3",
+                "lastStateChange": "21:01:10 11.03.2020",
+                "devices": [{
+                    "devID": "1",
+                    "deviceName": "Klatka",
+                    "isClosed": "True",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "2",
+                    "deviceName": "Drzwi wejściowe",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "3",
+                    "deviceName": "Sypialnia",
+                    "isClosed": "False",
+                    "lastStateChange": "04:23:00 10.03.2020"
+				},
+				{
+                    "devID": "4",
+                    "deviceName": "Okno 1",
+                    "isClosed": "True",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "5",
+                    "deviceName": "Okno 2",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "6",
+                    "deviceName": "Piwnica",
+                    "isClosed": "True",
+                    "lastStateChange": "04:23:00 10.03.2020"
+				},
+				{
+                    "devID": "7",
+                    "deviceName": "Garaż",
+                    "isClosed": "True",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "8",
+                    "deviceName": "Garaż 2",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "9",
+                    "deviceName": "Balkon",
+                    "isClosed": "False",
+                    "lastStateChange": "04:23:00 10.03.2020"
+                },{
+                    "devID": "10",
+                    "deviceName": " Balkon 2",
+                    "isClosed": "False",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "11",
+                    "deviceName": "Balkon 3",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "12",
+                    "deviceName": "Buda dla psa",
+                    "isClosed": "True",
+                    "lastStateChange": "04:23:00 10.03.2020"
+                },{
+                    "devID": "13",
+                    "deviceName": "Toaleta",
+                    "isClosed": "True",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "14",
+                    "deviceName": "Toaleta w budzie",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "15",
+                    "deviceName": "Sypialnia dla psa",
+                    "isClosed": "False",
+                    "lastStateChange": "04:23:00 10.03.2020"
+				},
+				{
+                    "devID": "16",
+                    "deviceName": "Strych",
+                    "isClosed": "False",
+                    "lastStateChange": "21:01:10 11.03.2020"
+                },
+                {
+                    "devID": "17",
+                    "deviceName": "Strych w piwnicy",
+                    "isClosed": "True",
+                    "lastStateChange": "14:34:23 11.03.2020"
+                },
+                {
+                    "devID": "18",
+                    "deviceName": "Oranżeria",
+                    "isClosed": "False",
+                    "lastStateChange": "04:23:00 10.03.2020"
+                }
+            ]
+			},
+			{
+				"colID": "3",
+				"collectionName": "Budynek B9",
+				"numberOfDevices": "1",
+                "lastStateChange": "06:54:00 09.03.2020",
+                "devices": [{
+                    "devID": "1",
+                    "deviceName": "1.12",
+                    "isClosed": "False",
+                    "lastStateChange": "14:14:14 11.03.2020"
+                }
+            ]
+			}
+		]
+
+
+	}
+}

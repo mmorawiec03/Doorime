@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Blank Template",
+    "slug": "Doorime",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "android"
+    ],
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#57A485"
+    },
+    "android": {
+      "package": "com.mibadura.pushtestapp",
+      "versionCode": 1
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
