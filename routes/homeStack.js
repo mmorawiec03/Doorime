@@ -8,7 +8,7 @@ const screens = {
         screen: Collections,
         navigationOptions: {
             title: 'Your Collections',
-            //headerStyle: { backgroundColor: '#eee' }
+            //headerStyle: { backgroundColor: '#f8f8f2' }
           }
     },
     DeviceScreen: {
@@ -23,7 +23,7 @@ const screens = {
 const HomeStack = createStackNavigator(screens, {
     defaultNavigationOptions: {
       headerTintColor: '#222',
-      headerStyle: { backgroundColor: '#a1e6e3', height: 60, borderBottomWidth:0, height: 80 },
+      headerStyle: { backgroundColor: '#8be9fd', height: 60, borderBottomWidth:0, height: 80 },
     }
   });
 

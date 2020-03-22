@@ -15,11 +15,11 @@ export const globalStyles = StyleSheet.create({
     padding: 20,
     paddingTop: 0,
     marginVertical: 6,
-    backgroundColor: '#a1e6e3',
+    backgroundColor: '#282a36',
   },
   subheader: {
     padding: 20,
-    backgroundColor: '#d7fffd',
+    backgroundColor: '#f8f8f2',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     borderColor: 'black',
@@ -71,7 +71,7 @@ textHighlight: {
     //shadowColor: 'red',
     //shadowOffset: 10,
     fontWeight: 'bold',
-    textShadowColor: '#57A485',
+    textShadowColor: '#8be9fd',
     textShadowOffset:{ width: 0.2, height: 0.2 },
     textShadowRadius:3
 },

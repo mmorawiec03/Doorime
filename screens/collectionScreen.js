@@ -68,7 +68,7 @@ export default function Home({ navigation }) {
     }
 
     return (
-        <View style={{backgroundColor: '#a1e6e3', flex:1}}>
+        <View style={{backgroundColor: '#282a36', flex:1}}>
             <View style={globalStyles.subheader}>
                 <Text style={globalStyles.textNotHighlighted}>Hello <Text style={globalStyles.textHighlight}>{userDataUnparsed.user.username}</Text>, here are your collections:</Text>
                 <Button 

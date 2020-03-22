@@ -20,7 +20,7 @@ export default function Devices({ navigation }) {
     }
 
     return (
-      <View style={{backgroundColor: '#a1e6e3', flex:1}}>
+      <View style={{backgroundColor: '#282a36', flex:1}}>
         <View style={globalStyles.subheader}>
           <Text style={globalStyles.textNotHighlighted}>Collection: <Text style={ globalStyles.textHighlight}>{ collection.collectionName }</Text></Text>
           <Text style={globalStyles.textNotHighlighted}>Number of devices: <Text style={ globalStyles.textHighlight}>{ collection.devices.length }</Text></Text>
@@ -40,7 +40,7 @@ export default function Devices({ navigation }) {
                   <View style={globalStyles.cardContent}>
                     <Text style={ globalStyles.titleText }>{ item.deviceName }</Text>
                     <Text name='isClosedName'>{ closedStatus(item.isClosed) }</Text>
-                    <Button 
+                    <Button
                       title='change state'
                       onPress={() => pressHandler(collection.colID, item.devID)}
                     />
