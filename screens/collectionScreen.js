@@ -1,24 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
+import React  from 'react';
+import { View, Text, FlatList, TouchableOpacity, Button, AsyncStorage } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
 import * as userDataUnparsed from '../data/userData.json';
 import CollectionCard from '../shared/CollectionCard';
+import NetInfo from '@react-native-community/netinfo';
 
-export default function Home({ navigation }) {
-    const [collections, setCollections] = useState(userDataUnparsed.user.collections);
-    const [refreshing, setRefreshing] = useState(false);
-
-    useEffect(() => {
-        // get collections from server
-    }, [refreshing]);
-
-    const refreshHandler = () => {
-        setRefreshing(true);
+class Home extends React.Component {
+    state = {
+        collections: userDataUnparsed.user.collections,
+        userNetworks: ['TP-LINK_D92239'],
+        refreshing: false
     }
 
-    const findOpenAndNotify = () => {
-        let openList = collections.map(collection => {
+    refreshHandler = () => {
+        // this.setState({...this.state, refreshing: true});
+        // setTimeout(() => {
+        //     this.setState({...this.state, refreshing: false});
+        // }, 2000);
+    }
+
+    unsubscribe = NetInfo.addEventListener(state => {
+        if (state.type === 'wifi' && this.state.userNetworks.includes(state.details.ssid)) {
+            this.getAtHome().then(atHome => {
+                console.log(`Connected to ${state.details.ssid} | Previous atHome state: ${atHome}`);
+                if (atHome !== 'true') {
+                    this.setAtHome('true').then(() => {
+                        console.log('The user entered the house');
+                    }); 
+                }
+            });
+        } else if (state.type !== 'none' && state.type !== 'unknown') {
+            this.getAtHome().then(atHome => {
+                console.log(`Current network state: ${state.type} | Previous atHome state: ${atHome}`);
+                if (atHome === 'true') {
+                    this.setAtHome('false').then(() => {
+                        this.findOpenAndNotify();
+                        console.log('The user have left the house | Sending notification');
+                    });
+                }
+            });
+        } else {
+            console.log('Not connected to any network | Waiting for connection');
+        }
+    });
+
+    setAtHome = async (atHome) => {
+        try {
+            return await AsyncStorage.setItem('@atHome', atHome);
+        } catch (e) {
+            // saving error
+        }
+    }
+
+    getAtHome = async () => {
+        try {
+            return await AsyncStorage.getItem('@atHome');
+        } catch(e) {
+            // error reading value
+        }
+    }
+      
+
+    findOpenAndNotify = () => {
+        let openList = this.state.collections.map(collection => {
             return ({
                 collection: collection.collectionName,
                 devices: collection.devices.filter(device => {
@@ -28,13 +73,13 @@ export default function Home({ navigation }) {
         });
         openList.forEach(collection => {
             collection.devices.forEach(device => {
-                notification(collection.collection, `${device.deviceName} is open!`);
+                this.notification(collection.collection, `${device.deviceName} is open!`);
             });
         });
-        setRefreshing(false);
+        //setRefreshing(false);
     }
 
-    const notification = (title, body) => {
+    notification = (title, body) => {
         initnotify().then(async (data) => {
             if (data) {
                 getToken().then((token) => {
@@ -48,51 +93,40 @@ export default function Home({ navigation }) {
 
     // -------- temporary functions --------
 
-    const pressHandler = () => {
-        findOpenAndNotify();
+    pressHandler = () => {
+        //this.notification('hello', 'world');
+        console.log('test button pressed');
     }
-
-    const changeState = (colId, devId) => {
-        let tempColData = collections;
-        for (let i = 0; i < tempColData.length; i++) {
-            if (tempColData[i]['colID'] === colId) {
-                for (let j = 0; j < tempColData[i]['devices'].length; j++) {
-                    if (tempColData[i]['devices'][j]['devID'] === devId) {
-                        tempColData[i]['devices'][j]['isClosed'] = !tempColData[i]['devices'][j]['isClosed'];
-                        break;
-                    }
-                }
-            }
-        }
-        setCollections(tempColData);
+    
+    render() {
+        return (
+            <View style={{backgroundColor: '#a1e6e3', flex:1}}>
+                <View style={globalStyles.subheader}>
+                    <Text style={globalStyles.textNotHighlighted}>Hello <Text style={globalStyles.textHighlight}>{userDataUnparsed.user.username}</Text>, here are your collections:</Text>
+                    <Button 
+                        title='TEST BUTTON'
+                        onPress={this.pressHandler}
+                    />            
+                </View>
+                <View style={globalStyles.container}>
+                    <FlatList 
+                        keyExtractor={(item) => item.colID.toString()}
+                        data={this.state.collections}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceScreen', {item})}>
+                                <CollectionCard>
+                                    <Text style={globalStyles.titleText}>{ item.collectionName }</Text>
+                                    <Text>Devices: {item.devices.length} | Last change: {item.lastStateChange}</Text>
+                                </CollectionCard>
+                            </TouchableOpacity>
+                        )}
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.refreshHandler}
+                    />
+                </View>
+            </View>
+        );
     }
-
-    return (
-        <View style={{backgroundColor: '#a1e6e3', flex:1}}>
-            <View style={globalStyles.subheader}>
-                <Text style={globalStyles.textNotHighlighted}>Hello <Text style={globalStyles.textHighlight}>{userDataUnparsed.user.username}</Text>, here are your collections:</Text>
-                <Button 
-                    title='Trigger notification'
-                    onPress={pressHandler}
-                />               
-            </View>
-            <View style={globalStyles.container}>
-                <FlatList 
-                    keyExtractor={(item) => item.colID.toString()}
-                    data={collections}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('DeviceScreen', {item, changeState})}>
-                            <CollectionCard>
-                                <Text style={globalStyles.titleText}>{ item.collectionName }</Text>
-                                <Text>Devices: {item.devices.length} | Last change: {item.lastStateChange}</Text>
-                            </CollectionCard>
-                        </TouchableOpacity>
-                    )}
-                    refreshing={refreshing}
-                    onRefresh={refreshHandler}
-                />
-            </View>
-        </View>
-    );
 }
-//ss
+
+export default Home;

@@ -11,13 +11,6 @@ export default function Devices({ navigation }) {
     const closedStatus = (isClosed) => isClosed ? ('Closed') : ('Open!');
     const closedStyle = (isClosed) => isClosed ? (globalStyles.closed) : (globalStyles.open);
     const doorIconController = (isClosed) => isClosed ? ('door-closed') : ('door-open');
-    
-    // temporary
-    const changeState = navigation.getParam('changeState');
-    const pressHandler = (colId, devId) => {
-      changeState(colId, devId);
-      navigation.goBack();
-    }
 
     return (
       <View style={{backgroundColor: '#a1e6e3', flex:1}}>
@@ -40,10 +33,6 @@ export default function Devices({ navigation }) {
                   <View style={globalStyles.cardContent}>
                     <Text style={ globalStyles.titleText }>{ item.deviceName }</Text>
                     <Text name='isClosedName'>{ closedStatus(item.isClosed) }</Text>
-                    <Button 
-                      title='change state'
-                      onPress={() => pressHandler(collection.colID, item.devID)}
-                    />
                   </View>
                   <MaterialCommunityIcons name={doorIconController(item.isClosed)} size={40} color='#333' style={globalStyles.doorIcon}/>
                 </View>
