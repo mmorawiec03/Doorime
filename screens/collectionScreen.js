@@ -4,12 +4,12 @@ import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
 import * as userDataUnparsed from '../data/userData.json';
 import CollectionCard from '../shared/CollectionCard';
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoCellularGeneration, NetInfoStateType } from '@react-native-community/netinfo';
 
 class Home extends React.Component {
     state = {
         collections: userDataUnparsed.user.collections,
-        userNetworks: ['TP-LINK_D92239'],
+        userNetworks: ['Carrefour xxx Free WiFi xxx'],
         refreshing: false
     }
 
@@ -95,7 +95,32 @@ class Home extends React.Component {
 
     pressHandler = () => {
         //this.notification('hello', 'world');
-        console.log('test button pressed');
+        
+        NetInfo.fetch().then(state => {
+            console.log('Connection type', state.type);
+            console.log('Is connected?', state.isConnected);
+            if (state.type === 'wifi'){
+                console.log('Previous home network SSID: ', this.state.userNetworks[0]);
+                console.log('You are now connected to ', state.details.ssid);
+                this.state.userNetworks[0] = state.details.ssid;
+                const currentSetNetwork = this.state.userNetworks[0];
+                console.log('Your Home Network is now set to ', currentSetNetwork);
+                this.setAtHome('true').then(() => {
+                    console.log('User is in the house');
+                }); 
+                
+                alert(`Welcome Home! Your Home Network is now set to ${currentSetNetwork}`);
+
+                
+            } else {
+                alert(`You cannot set a Home Network when not connected to WiFi`);
+                this.setAtHome('false').then(() => {
+                    console.log('User is not at home');
+                }); 
+            }
+            
+          });
+        
     }
     
     render() {
@@ -104,7 +129,7 @@ class Home extends React.Component {
                 <View style={globalStyles.subheader}>
                     <Text style={globalStyles.textNotHighlighted}>Hello <Text style={globalStyles.textHighlight}>{userDataUnparsed.user.username}</Text>, here are your collections:</Text>
                     <Button 
-                        title='TEST BUTTON'
+                        title='Set current WiFi as Home Network'
                         onPress={this.pressHandler}
                     />            
                 </View>
