@@ -5,13 +5,60 @@ import { globalStyles } from '../styles/global';
 import * as userDataUnparsed from '../data/userData.json';
 import CollectionCard from '../shared/CollectionCard';
 import NetInfo, { NetInfoCellularGeneration, NetInfoStateType } from '@react-native-community/netinfo';
+import * as GoogleSignIn from 'expo-google-sign-in';
 
 class Home extends React.Component {
     state = {
         collections: userDataUnparsed.user.collections,
         userNetworks: ['Carrefour xxx Free WiFi xxx'],
-        refreshing: false
+        refreshing: false,
+        user: null
     }
+
+    //--------- GOOGLE SIGN IN FUNCTIONS -----------//
+
+    _syncUserWithStateAsync = async () => {
+        const user = await GoogleSignIn.signInSilentlyAsync();
+        this.setState({ user });
+      };
+
+    signOutAsync = async () => {
+    await GoogleSignIn.signOutAsync();
+    this.setState({ user: null });
+    };
+
+    signInAsync = async () => {
+    try {
+        await GoogleSignIn.askForPlayServicesAsync();
+        const { type, user } = await GoogleSignIn.signInAsync();
+        if (type === 'success') {
+        this._syncUserWithStateAsync();
+        }
+    } catch ({ message }) {
+        alert('login: Error:' + message);
+    }
+    };
+
+    googleButtonOnPress = () => {
+        if (this.state.user) {
+            this.signOutAsync();
+            console.log('Logged out');
+          } else {
+            this.signInAsync();
+            console.log('Logged in');
+          }
+    }
+
+//--------- END OF GOOGLE SIGN IN FUNCTIONS -----------//
+
+    // nameTeller = () =>{
+    //     //function returns Google first name or sample name from JSON if user not signed in
+    //     if (this.state.user != null) {
+    //         return this.state.user.firstName;
+    //       } else {
+    //         return userDataUnparsed.user.username;
+    //       }
+    // }
 
     refreshHandler = () => {
         // this.setState({...this.state, refreshing: true});
@@ -76,7 +123,6 @@ class Home extends React.Component {
                 this.notification(collection.collection, `${device.deviceName} is open!`);
             });
         });
-        //setRefreshing(false);
     }
 
     notification = (title, body) => {
@@ -91,11 +137,8 @@ class Home extends React.Component {
         });
     }
 
-    // -------- temporary functions --------
-
     pressHandler = () => {
-        //this.notification('hello', 'world');
-        
+
         NetInfo.fetch().then(state => {
             console.log('Connection type', state.type);
             console.log('Is connected?', state.isConnected);
@@ -118,9 +161,7 @@ class Home extends React.Component {
                     console.log('User is not at home');
                 }); 
             }
-            
           });
-        
     }
     
     render() {
@@ -131,7 +172,11 @@ class Home extends React.Component {
                     <Button 
                         title='Set current WiFi as Home Network'
                         onPress={this.pressHandler}
-                    />            
+                    /> 
+                    <Button 
+                        title='SIGN IN/OUT WITH GOOGLE!'
+                        onPress={this.googleButtonOnPress}
+                    />          
                 </View>
                 <View style={globalStyles.container}>
                     <FlatList 
