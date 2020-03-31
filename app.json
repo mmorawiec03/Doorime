@@ -13,7 +13,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#57A485"
+      "backgroundColor": "#87CEEB"
     },
     "android": {
       "package": "com.mibadura.pushtestapp",
