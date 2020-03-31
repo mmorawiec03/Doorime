@@ -2,11 +2,10 @@
 	"user": {
         "userID": 21372137,
         "username": "Ziomal Ziomal",
-        "lastUpdated": "23:11:56 11.03.2020",
+        "networks": ["Carrefour xxx Free WiFi xxx", "TP-LINK_D92239"],
 		"collections": [{
 				"colID": 1,
 				"collectionName": "Ranczo w Texasie",
-				"lastStateChange": "20:11:56 11.03.2020",
 				"devices": [{
 						"devID": 1,
 						"deviceName": "Brama",
@@ -24,7 +23,6 @@
 			{
 				"colID": 2,
 				"collectionName": "Dom w Krakowie",
-                "lastStateChange": "21:01:10 11.03.2020",
                 "devices": [{
                     "devID": 1,
                     "deviceName": "Klatka",
@@ -135,7 +133,6 @@
 			{
 				"colID": 3,
 				"collectionName": "Budynek B9",
-                "lastStateChange": "06:54:00 09.03.2020",
                 "devices": [{
                     "devID": 1,
                     "deviceName": "1.12",

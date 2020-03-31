@@ -37,6 +37,7 @@ export const globalStyles = StyleSheet.create({
     shadowRadius: 2,
     marginHorizontal: 4,
     marginVertical: 6,
+    padding: 5,
 },
 closed: {
     borderRadius: 6,
@@ -48,6 +49,7 @@ closed: {
     shadowRadius: 2,
     marginHorizontal: 4,
     marginVertical: 6,
+    padding: 5,
 
 },
 wholecard: {
@@ -60,7 +62,7 @@ cardContent: {
 },
 doorIcon: {
     marginHorizontal: 18,
-    marginVertical: 20,
+    marginTop: 10,
 },
 textHighlight: {
     //borderWidth:2,

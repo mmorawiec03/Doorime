@@ -1,0 +1,15 @@
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import Navigator from './homeStack';
+import LoginScreen from '../screens/loginScreen';
+
+
+export default function AuthNavigator() {
+    const [isAuth, setIsAuth] = useState(false);
+
+  return (
+    <View>
+        {isAuth ? (<Navigator />) : (<LoginScreen />)}
+    </View>
+  );
+}
