@@ -5,10 +5,10 @@ import LoginScreen from '../screens/loginScreen';
 
 
 export default function AuthNavigator() {
-    const [isAuth, setIsAuth] = useState(false);
+    const [isAuth, setIsAuth] = useState(true);
 
   return (
-    <View>
+    <View style={{flex: 1}}>
         {isAuth ? (<Navigator />) : (<LoginScreen />)}
     </View>
   );

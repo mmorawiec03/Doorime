@@ -1,8 +1,9 @@
 import React  from 'react';
-import { View, Text, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
-import CollectionCard from '../shared/CollectionCard';
+import Card from '../shared/Card';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 
@@ -121,33 +122,49 @@ class Home extends React.Component {
     
     render() {
         return (
-            <View style={{backgroundColor: '#a1e6e3', flex:1}}>
+            <View style={globalStyles.container}>
                {this.state.loading ? (
-                    <View style={{flex:1, justifyContent: 'center'}}>
-                        <ActivityIndicator size="large" color='black' />
+                    <View style={globalStyles.contextCenter}>
+                        <ActivityIndicator size="large" color='lightgrey' />
                     </View>
                 ) : (
-                    <View style={{flex:1}}>
-                        <View style={globalStyles.subheader}>
-                            <Text style={globalStyles.textNotHighlighted}>Hello <Text style={globalStyles.textHighlight}>{this.state.user.username}</Text>, here are your collections:</Text>            
-                        </View>
-                        <View style={globalStyles.container}>
-                            <FlatList 
-                                keyExtractor={(item) => item.colID.toString()}
-                                data={this.state.collections}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceScreen', {item})}>
-                                        <CollectionCard>
-                                            <Text style={globalStyles.titleText}>{ item.collectionName }</Text>
-                                            <Text>Devices: {item.devices.length}</Text>
-                                        </CollectionCard>
-                                    </TouchableOpacity>
-                                )}
-                                refreshing={this.state.refreshing}
-                                onRefresh={this.refreshHandler}
-                            />
-                        </View>
-                    </View>
+                    <FlatList 
+                        ListHeaderComponent={
+                            <>
+                                <View style={globalStyles.header}>
+                                    <Image source={require('../assets/smart-home.jpg')} style={globalStyles.headerImage} opacity={0.5} />  
+                                </View>
+                                <TouchableOpacity onPress={() => console.log('add collection')}>
+                                    <Card>
+                                        <Text style={globalStyles.titleText}>ADD COLLECTION</Text>                                            
+                                        <AntDesign name='pluscircle' size={24} color='#00b6b6' />
+                                    </Card>
+                                </TouchableOpacity>
+                            </>
+                        }
+                        keyExtractor={(item) => item.colID.toString()}
+                        data={this.state.collections}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceScreen', {item})}>
+                                <Card>                                            
+                                    <Text style={globalStyles.titleText}>{ item.collectionName.toUpperCase() }</Text>                                            
+                                    <AntDesign name='caretright' size={24} color='#00b6b6' />
+                                </Card>
+                            </TouchableOpacity>
+                        )}
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.refreshHandler}
+                        ListFooterComponent={
+                            <>
+                                <TouchableOpacity onPress={() => console.log('logout')}>
+                                    <Card>
+                                        <Text style={globalStyles.titleText}>LOGOUT</Text>                                            
+                                        <MaterialCommunityIcons name='logout' size={32} color='#00b6b6' />
+                                    </Card>
+                                </TouchableOpacity>
+                            </>
+                        }
+                    />
                 )} 
             </View>
         );

@@ -1,85 +1,38 @@
 import { StyleSheet } from 'react-native';
 
 export const globalStyles = StyleSheet.create({
-  titleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  paragraph: {
-    marginVertical: 8,
-    lineHeight: 20,
-  },
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 0,
-    marginVertical: 6,
-    backgroundColor: '#a1e6e3',
+    backgroundColor: '#262d37', //d7fffd
   },
-  subheader: {
-    padding: 20,
-    backgroundColor: '#d7fffd',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    borderColor: 'black',
-    borderTopWidth:2,
-    borderBottomWidth:2,
-    flexWrap: 'wrap'
+  contextCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  open: {
-    borderRadius: 6,
-    elevation: 3,
-    backgroundColor: '#fafba4', //F46F87
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: '#333',
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    marginHorizontal: 4,
-    marginVertical: 6,
-    padding: 5,
-},
-closed: {
-    borderRadius: 6,
-    elevation: 3,
-    backgroundColor: '#eca0b6',
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: '#333',
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    marginHorizontal: 4,
-    marginVertical: 6,
-    padding: 5,
-
-},
-wholecard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-},
-cardContent: {
-    marginHorizontal: 18,
-    marginVertical: 20,
-},
-doorIcon: {
-    marginHorizontal: 18,
-    marginTop: 10,
-},
-textHighlight: {
-    //borderWidth:2,
-    padding:3,
-    //borderColor: '#111',
-    //borderRadius: 6,
-    //backgroundColor: '#A7C3FF',
-    //shadowColor: 'red',
-    //shadowOffset: 10,
-    fontWeight: 'bold',
-    textShadowColor: '#57A485',
-    textShadowOffset:{ width: 0.2, height: 0.2 },
-    textShadowRadius:3
-},
-textNotHighlighted: {
-  marginVertical:6,
-  marginHorizontal:3
-  //borderWidth:3
-}
+  header: {
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerImage: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomWidth: 1,
+  },
+  titleText: {
+    fontSize: 20,
+    color: 'lightgrey',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+  },
+  paragraph: {
+    fontSize: 16,
+    color: 'lightgrey',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+  },
 });

@@ -1,43 +1,47 @@
 import React, { useState} from 'react';
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
 import { globalStyles } from '../styles/global';
-import DeviceCard from  '../shared/DeviceCard';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Card from  '../shared/Card';
+import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 
 
 export default function Devices({ navigation }) {
     const [collection, setCollection] = useState(navigation.getParam('item'));
     
-    const closedStatus = (isClosed) => isClosed ? ('Closed') : ('Open!');
-    const closedStyle = (isClosed) => isClosed ? (globalStyles.closed) : (globalStyles.open);
-    const doorIconController = (isClosed) => isClosed ? ('door-closed') : ('door-open');
+    const iconColor = (isClosed) => isClosed ? ('green') : ('red');
+    const iconName = (isClosed) => isClosed ? ('lock') : ('lock-open');
 
     return (
-      <View style={{backgroundColor: '#a1e6e3', flex:1}}>
-        <View style={globalStyles.subheader}>
-          <Text style={globalStyles.textNotHighlighted}>Collection: <Text style={ globalStyles.textHighlight}>{ collection.collectionName }</Text></Text>
-          <Text style={globalStyles.textNotHighlighted}>Number of devices: <Text style={ globalStyles.textHighlight}>{ collection.devices.length }</Text></Text>
-        </View>
-        <View style={globalStyles.container}>
-          <FlatList
-            keyExtractor={(item) => item.devID.toString()}
-            data={collection.devices} 
-            renderItem={( {item} ) => (
-              <View style={ closedStyle(item.isClosed) }>
-                <View style={globalStyles.wholecard}>
-                  <View style={globalStyles.cardContent}>
-                    <Text style={ globalStyles.titleText }>{ item.deviceName }</Text>
-                    <Text>{ item.lastStateChange }</Text>
-                  </View>
-                  <View style={{alignItems: 'center'}}>
-                    <MaterialCommunityIcons name={doorIconController(item.isClosed)} size={40} color='#333' style={globalStyles.doorIcon}/>
-                    <Text name='isClosedName'>{ closedStatus(item.isClosed) }</Text>
-                  </View>
-                </View>
+      <View style={globalStyles.container}>
+        <FlatList
+          ListHeaderComponent={
+            <>
+                <ImageBackground source={require('../assets/devices-background.jpg')} style={globalStyles.header}>
+                  <Text style={globalStyles.titleText}>{ collection.collectionName.toUpperCase() }</Text>
+                  <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
+                </ImageBackground>
+                <TouchableOpacity onPress={() => console.log('add device')}>
+                    <Card>
+                        <Text style={globalStyles.titleText}>ADD DEVICE</Text>                                            
+                        <AntDesign name='pluscircle' size={24} color='#00b6b6' />
+                    </Card>
+                </TouchableOpacity>
+            </>
+          }
+          keyExtractor={(item) => item.devID.toString()}
+          data={collection.devices} 
+          renderItem={( {item} ) => (
+            <Card>
+              <View>
+                  <Text style={globalStyles.titleText}>{ item.deviceName }</Text>
+                  <Text style={globalStyles.paragraph}>{ item.lastStateChange }</Text>
               </View>
-            )}
+              <View>
+                <SimpleLineIcons name={iconName(item.isClosed)} size={40} color={iconColor(item.isClosed)} style={globalStyles.doorIcon}/>
+              </View>
+            </Card>
+          )}
         />
-        </View>
       </View>
     );
 }
