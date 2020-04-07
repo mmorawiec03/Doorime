@@ -5,7 +5,7 @@ import LoginScreen from '../screens/loginScreen';
 
 
 export default function AuthNavigator() {
-    const [isAuth, setIsAuth] = useState(true);
+    const [isAuth, setIsAuth] = useState(false);
 
   return (
     <View style={{flex: 1}}>
