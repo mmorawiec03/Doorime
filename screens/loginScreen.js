@@ -1,59 +1,74 @@
 import React, { useState } from 'react';
-import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
+import { Alert, View, Text, Image, KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
 import { loginStyles } from '../styles/login';
+import { ScrollView } from 'react-native-gesture-handler';
 
+class LoginScreen extends React.Component {
 
-export default function LoginScreen() {
-
-    const [register, setRegister] = useState(false);
-
-    // const credentials = {
-    //     username: '',
-    //     password: '',
-    // }
+    state = {
+        username: '',
+        password: '',
+        action: '',
+      };
     
-    const handleLogin = () => {
-        setRegister(!register);
+    onLogin() {
+        this.setState({action: 'login'});
+        const { username, password, action } = this.state;
+        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: ${action}`);
     }
 
-    const handleSignin = () => {
-        setRegister(!register);
+    onSignin() {
+        this.setState({action: 'signin'});
+        const { username, password, action } = this.state;
+        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: ${action}`);
     }
+    
+    render (){
+        return (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                
+                <View style={loginStyles.container}>
+                    {/* <KeyboardAvoidingView behavior='padding'> */}
+                        <View style={loginStyles.iconContainer}>
+                            <Image source={require('../assets/doorime-logo.png')} style={loginStyles.icon} />
+                        </View>
+                    {/* </KeyboardAvoidingView> */}
 
-    return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={loginStyles.container}>
-                <KeyboardAvoidingView behavior='padding'>
-                    <View style={loginStyles.iconContainer}>
-                        <Image source={require('../assets/doorime-logo.png')} style={loginStyles.icon} />
+                    
+                    <View style={loginStyles.inputContainer}>
+                        <TextInput
+                            value={this.state.username}
+                            onChangeText={(username) => this.setState({ username })}
+                            placeholder={'Username'}
+                            style={loginStyles.input}
+                            placeholderTextColor="#000" 
+                        />
+                        <TextInput
+                            value={this.state.password}
+                            onChangeText={(password) => this.setState({ password })}
+                            placeholder={'Password'}
+                            secureTextEntry={true}
+                            style={loginStyles.input}
+                            placeholderTextColor="#000" 
+                        />
+                    </View> 
+                   
+                   
+                    <View style={loginStyles.buttonContainer}>
+                        <TouchableOpacity style={loginStyles.buttonLogin} onPress={this.onLogin.bind(this)}>
+                            <Text style={loginStyles.buttonText}>Log in</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={loginStyles.buttonSignin} onPress={this.onSignin.bind(this)}>
+                            <Text style={loginStyles.buttonText}>Sign up</Text>
+                        </TouchableOpacity>
                     </View>
-                </KeyboardAvoidingView>
-                <View style={loginStyles.inputContainer}>
-                    <TextInput
-                        //value={credentials.username}
-                        //onChangeText={(username) => this.setState({ username })}
-                        placeholder={'Username'}
-                        style={loginStyles.input}
-                        placeholderTextColor="#000" 
-                    />
-                    <TextInput
-                        //value={credentials.password}
-                        //onChangeText={(password) => this.setState({ password })}
-                        placeholder={'Password'}
-                        secureTextEntry={true}
-                        style={loginStyles.input}
-                        placeholderTextColor="#000" 
-                    />
-                </View> 
-                <View style={loginStyles.buttonContainer}>
-                    <TouchableOpacity style={loginStyles.buttonLogin} onPress={handleLogin}>
-                        <Text style={loginStyles.buttonText}>Log in</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={loginStyles.buttonSignin} onPress={handleSignin}>
-                        <Text style={loginStyles.buttonText}>Sign up</Text>
-                    </TouchableOpacity>
+                    
                 </View>
-            </View>
-        </TouchableWithoutFeedback>
-    );
+
+            </TouchableWithoutFeedback>
+        );
+    }
+
 }
+
+export default LoginScreen;
