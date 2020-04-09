@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, View, Text, Image, KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
 import { loginStyles } from '../styles/login';
-import { ScrollView } from 'react-native-gesture-handler';
+
 
 class LoginScreen extends React.Component {
 
@@ -12,15 +12,18 @@ class LoginScreen extends React.Component {
       };
     
     onLogin() {
-        this.setState({action: 'login'});
+        //this.setState({action: 'login'});
+        this.onLogin.bind(this);
         const { username, password, action } = this.state;
-        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: ${action}`);
+        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: LOGGED IN | Action in state: ${action}`);
+        console.log("Executed onLogin");
     }
 
     onSignin() {
-        this.setState({action: 'signin'});
+        //this.setState({action: 'signin'});
         const { username, password, action } = this.state;
-        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: ${action}`);
+        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: SIGNED IN | Action in state: ${action}`);
+        console.log("Executed onSignin");
     }
     
     render (){
@@ -34,7 +37,7 @@ class LoginScreen extends React.Component {
                         </View>
                     {/* </KeyboardAvoidingView> */}
 
-                    
+                    {/* <KeyboardAvoidingView behavior='position'> */}
                     <View style={loginStyles.inputContainer}>
                         <TextInput
                             value={this.state.username}
@@ -52,7 +55,7 @@ class LoginScreen extends React.Component {
                             placeholderTextColor="#000" 
                         />
                     </View> 
-                   
+                    {/* </KeyboardAvoidingView> */}
                    
                     <View style={loginStyles.buttonContainer}>
                         <TouchableOpacity style={loginStyles.buttonLogin} onPress={this.onLogin.bind(this)}>
@@ -62,7 +65,6 @@ class LoginScreen extends React.Component {
                             <Text style={loginStyles.buttonText}>Sign up</Text>
                         </TouchableOpacity>
                     </View>
-                    
                 </View>
 
             </TouchableWithoutFeedback>
