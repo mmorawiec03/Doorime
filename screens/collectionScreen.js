@@ -30,7 +30,7 @@ class Home extends React.Component {
     }
 
     getUserData = () => {
-        api.get('/user').then(res => {    // the route will be '/user/:id'
+        api.get('/login').then(res => {    // the route will be '/user/:id'
             this.setState({
                 user: {
                     username: res.data.user.username,
