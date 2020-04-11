@@ -1,9 +1,10 @@
 import React  from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator, Modal } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
+import { modalFormStyles } from '../styles/modalForm';
 import Card from '../shared/Card';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 
@@ -13,7 +14,8 @@ class Home extends React.Component {
         collections: [],
         userNetworks: [],
         refreshing: false,
-        loading: true
+        loading: true,
+        modalOpen: false
     }
 
     componentDidMount() {
@@ -22,8 +24,7 @@ class Home extends React.Component {
 
     refreshHandler = () => {
         this.setState({
-            refreshing: true,
-            ...this.state
+            refreshing: true
         });
         this.getUserData();
     }
@@ -44,8 +45,7 @@ class Home extends React.Component {
             console.log(`[ERROR] ${err}`);
             this.setState({
                 refreshing: false,
-                loading: false,
-                ...this.state
+                loading: false
             });
         });
     }
@@ -119,11 +119,25 @@ class Home extends React.Component {
             }
         });
     }
-    
+
+    setModalOpen = (open) => this.setState({modalOpen: open});
+
     render() {
         return (
             <View style={globalStyles.container}>
-               {this.state.loading ? (
+                
+                <Modal visible={this.state.modalOpen} animationType='slide'>
+                    <View style={globalStyles.container}>
+                        <View style={modalFormStyles.closeButtonContainer}>
+                            <Entypo name='cross' size={36} color='#00b6b6' onPress={() => this.setModalOpen(false)} />
+                        </View>
+                        <View style={modalFormStyles.formContainer}>
+                            <Text style={globalStyles.paragraph}>add collection form</Text>
+                        </View>
+                    </View>
+                </Modal>
+
+                {this.state.loading ? (
                     <View style={globalStyles.contextCenter}>
                         <ActivityIndicator size="large" color='lightgrey' />
                     </View>
@@ -134,7 +148,7 @@ class Home extends React.Component {
                                 <View style={globalStyles.header}>
                                     <Image source={require('../assets/smart-home.jpg')} style={globalStyles.headerImage} opacity={0.5} />  
                                 </View>
-                                <TouchableOpacity onPress={() => console.log('add collection')}>
+                                <TouchableOpacity onPress={() => this.setModalOpen(true)} >
                                     <Card>
                                         <Text style={globalStyles.titleText}>ADD COLLECTION</Text>                                            
                                         <AntDesign name='pluscircle' size={24} color='#00b6b6' />
