@@ -1,15 +1,42 @@
 import React, { useState } from 'react';
 import { Alert, View, Text, Image, KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
 import { loginStyles } from '../styles/login';
-
+import NetInfo from '@react-native-community/netinfo';
+import { api } from '../api/apiHost';
+import base64 from 'base-64';
 
 class LoginScreen extends React.Component {
 
     state = {
         username: '',
         password: '',
-        action: '',
+        actotion: '',
+        token: '',
       };
+
+    
+
+    getToken() {
+        const { username, password } = this.state;
+        var basicAuth = 'Basic ' + base64.encode(username + ':' + password);
+        console.log('Username and  pass used: '+ username + ':' + password);
+        console.log('Base64 auth created: '+ basicAuth);
+
+        api.get('/login', {
+            headers: {
+                'Authorization': basicAuth,
+              }
+        }).then(res => {    // the route will be '/user/:id'
+        console.log(res.data.token);
+        this.setState({ token: res.data.token });
+        }).catch(err => {
+            console.log(`[ERROR] ${err}`);
+            this.setState({
+                refreshing: false,
+                loading: false
+            });
+        });
+    }
     
     onLogin() {
         //this.setState({action: 'login'});
@@ -17,6 +44,10 @@ class LoginScreen extends React.Component {
         const { username, password, action } = this.state;
         Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: LOGGED IN | Action in state: ${action}`);
         console.log("Executed onLogin");
+        //this.getUserData();
+        console.log( this.state.token );
+        
+        this.getToken();
     }
 
     onSignin() {
@@ -24,6 +55,10 @@ class LoginScreen extends React.Component {
         const { username, password, action } = this.state;
         Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: SIGNED IN | Action in state: ${action}`);
         console.log("Executed onSignin");
+        //this.getUserData();
+        
+        this.getToken();
+
     }
     
     render (){
