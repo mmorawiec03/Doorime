@@ -4,61 +4,102 @@ import { loginStyles } from '../styles/login';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 import base64 from 'base-64';
+import { AsyncStorage } from 'react-native';
 
 class LoginScreen extends React.Component {
 
     state = {
         username: '',
         password: '',
-        actotion: '',
+        date: '',
         token: '',
+        isAuth: false
       };
 
-    
+    _storeData = async (token) => {
+        console.log('trying to save token');
+    try {
+        await AsyncStorage.setItem('stored:token', token);
+        console.log('token saved');
+    } catch (error) {
+        console.log('token NOT saved');
+        console.log(error);
+    }
+    };
 
-    getToken() {
+    _retrieveData = async () => {
+        try {
+            console.log('trying to get the token fron storage');
+          const value = await AsyncStorage.getItem('stored:token');
+          if (value !== null) {
+            console.log('we have our stored token!');
+            console.log(value);
+          }
+        } catch (error) {
+            console.log('we dont have a token');
+            console.log(error);
+        }
+      };
+
+    getToken(method) {
         const { username, password } = this.state;
         var basicAuth = 'Basic ' + base64.encode(username + ':' + password);
         console.log('Username and  pass used: '+ username + ':' + password);
         console.log('Base64 auth created: '+ basicAuth);
 
-        api.get('/login', {
-            headers: {
-                'Authorization': basicAuth,
-              }
-        }).then(res => {    // the route will be '/user/:id'
-        console.log(res.data.token);
-        this.setState({ token: res.data.token });
+        api.get('/login', { headers: { 'Authorization': basicAuth }}).then(res => {
+        
+        //console.log(res.data.token);
+        console.log(res.headers.date);
+        //console.log(res);
+        var date = res.headers.date;
+        var token = res.data.token;
+        var message = res.data.message;
+        Alert.alert('Info',
+        `Username: ${username}
+        Password: ${password}
+        Action: ${method}
+        Message: ${message}
+        Date: ${date}
+        Token: ${token}`);
+
+        this._storeData(token);
+        this.setState({ 
+            token: token, 
+            date: date,
+            isAuth: true
+         });
         }).catch(err => {
-            console.log(`[ERROR] ${err}`);
+            //console.log(err.response);
+            if(err.response != undefined && 401 === err.response.status){
+                Alert.alert(`${err.response.data.message}`);
+                console.log(`[ERROR] ${err.response.data.message}`);
+            }
+            else{
+                Alert.alert(`${err}`);
+                console.log(`[ERROR] ${err}`);
+            }
+            
+
             this.setState({
                 refreshing: false,
                 loading: false
             });
         });
+        
     }
     
     onLogin() {
-        //this.setState({action: 'login'});
-        this.onLogin.bind(this);
-        const { username, password, action } = this.state;
-        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: LOGGED IN | Action in state: ${action}`);
+        var method = 'Login';
+        this.getToken(method);
         console.log("Executed onLogin");
-        //this.getUserData();
-        console.log( this.state.token );
-        
-        this.getToken();
     }
 
     onSignin() {
-        //this.setState({action: 'signin'});
-        const { username, password, action } = this.state;
-        Alert.alert('Credentials', `Username: \'${username}\' + Password: \'${password}\' + Action used: SIGNED IN | Action in state: ${action}`);
+        var method = 'Signin';
+        //this.getToken(method);
         console.log("Executed onSignin");
-        //this.getUserData();
-        
-        this.getToken();
-
+        this._retrieveData();
     }
     
     render (){
