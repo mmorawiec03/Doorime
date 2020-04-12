@@ -15,11 +15,27 @@ class Home extends React.Component {
         userNetworks: [],
         refreshing: false,
         loading: true,
-        modalOpen: false
+        modalOpen: false,
+        token: ''
     }
 
+    _retrieveData = async () => {
+        try {
+            //console.log('trying to get the token fron storage');
+          const value = await AsyncStorage.getItem('stored:token');
+          if (value !== null) {
+            return value;
+          }
+        } catch (error) {
+            console.log('we dont have a token');
+            console.log(error);
+            return null;
+        }
+    };
+
     componentDidMount() {
-        this.getUserData();
+        this.getAllData();
+        //this.getUserData();
     }
 
     refreshHandler = () => {
@@ -27,6 +43,34 @@ class Home extends React.Component {
             refreshing: true
         });
         this.getUserData();
+    }
+
+    getAllData = async () => {
+        var token = await this._retrieveData();
+        api.get('/get_all_data', { headers: { 'x-access-token': token }}).then(res => {
+            console.log('Token used: ',token);
+            var userData = 'Object '+res.data.result; //brakuje nam 'Object' lub 'Array' przed poziomami JSONa. Trzeba to zmodyfikowac po stronie API
+            console.log(userData); //userData w tej chwili jest stringiem, nie obiektem. Kiedy Paweł zmodyfikuje to po stronie api, łatwo będzie dostać sie do danych
+            this.setState({
+                // user: {
+                //     username: res.data.user.username,
+                //     userId: res.data.user.userID
+                // },
+                // collections: res.data.user.collections,
+                // userNetworks: res.data.user.networks,
+                refreshing: false,
+                loading: false
+            });
+            }).catch(err => {
+                console.log('Token used: ',token);
+                if(err.response != undefined && 401 === err.response.status){
+                    console.log(`[ERROR] ${err.response.data.message}`);
+                }
+                else{
+                    console.log(`[ERROR] ${err}`);
+                }
+            }
+            );
     }
 
     getUserData = () => {
