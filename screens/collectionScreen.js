@@ -1,5 +1,5 @@
 import React  from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
@@ -7,6 +7,9 @@ import Card from '../shared/Card';
 import { AntDesign, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
+import { getAtHome, setAtHome } from '../storage/atHome';
+import { getAuthToken } from '../storage/token';
+
 
 class Home extends React.Component {
     state = {
@@ -15,27 +18,11 @@ class Home extends React.Component {
         userNetworks: [],
         refreshing: false,
         loading: true,
-        modalOpen: false,
-        token: ''
+        modalOpen: false
     }
 
-    _retrieveData = async () => {
-        try {
-            //console.log('trying to get the token fron storage');
-          const value = await AsyncStorage.getItem('stored:token');
-          if (value !== null) {
-            return value;
-          }
-        } catch (error) {
-            console.log('we dont have a token');
-            console.log(error);
-            return null;
-        }
-    };
-
     componentDidMount() {
-        this.getAllData();
-        //this.getUserData();
+        this.getUserData();
     }
 
     refreshHandler = () => {
@@ -45,86 +32,48 @@ class Home extends React.Component {
         this.getUserData();
     }
 
-    getAllData = async () => {
-        var token = await this._retrieveData();
-        api.get('/get_all_data', { headers: { 'x-access-token': token }}).then(res => {
-            console.log('Token used: ',token);
-            var userData = 'Object '+res.data.result; //brakuje nam 'Object' lub 'Array' przed poziomami JSONa. Trzeba to zmodyfikowac po stronie API
-            console.log(userData); //userData w tej chwili jest stringiem, nie obiektem. Kiedy Paweł zmodyfikuje to po stronie api, łatwo będzie dostać sie do danych
-            this.setState({
-                // user: {
-                //     username: res.data.user.username,
-                //     userId: res.data.user.userID
-                // },
-                // collections: res.data.user.collections,
-                // userNetworks: res.data.user.networks,
-                refreshing: false,
-                loading: false
-            });
-            }).catch(err => {
-                console.log('Token used: ',token);
-                if(err.response != undefined && 401 === err.response.status){
-                    console.log(`[ERROR] ${err.response.data.message}`);
-                }
-                else{
-                    console.log(`[ERROR] ${err}`);
-                }
-            }
-            );
-    }
-
     getUserData = () => {
-        api.get('/login').then(res => {    // the route will be '/user/:id'
-            this.setState({
-                user: {
-                    username: res.data.user.username,
-                    userId: res.data.user.userID
-                },
-                collections: res.data.user.collections,
-                userNetworks: res.data.user.networks,
-                refreshing: false,
-                loading: false
-            });
-        }).catch(err => {
-            console.log(`[ERROR] ${err}`);
-            this.setState({
-                refreshing: false,
-                loading: false
-            });
+        getAuthToken().then(token => {
+            api.get('/get_all_data', { headers: { 'x-access-token': token }})
+                .then(res => {
+                    return JSON.parse(res.data.result);
+                }).then(data => {
+                    console.log(data);
+                    this.setState({
+                        // user: {
+                        //    username: data.user.username,
+                        //    userId: data.user.userID
+                        // },
+                        // collections: data.user.collections,
+                        // userNetworks: data.user.networks,
+                        refreshing: false,
+                        loading: false
+                    });
+                }).catch(err => {
+                    console.log(`[ERROR] ${err}`);
+                    this.setState({
+                        refreshing: false,
+                        loading: false
+                    });
+                });
         });
-    }
-
-    setAtHome = async (atHome) => {
-        try {
-            return await AsyncStorage.setItem('@atHome', atHome);
-        } catch (e) {
-            // saving error
-        }
-    }
-
-    getAtHome = async () => {
-        try {
-            return await AsyncStorage.getItem('@atHome');
-        } catch(e) {
-            // error reading value
-        }
     }
 
     unsubscribe = NetInfo.addEventListener(state => {
         if (state.type === 'wifi' && this.state.userNetworks.includes(state.details.ssid)) {
-            this.getAtHome().then(atHome => {
+            getAtHome().then(atHome => {
                 console.log(`[INFO] Connected to ${state.details.ssid} | Previous atHome state: ${atHome}`);
                 if (atHome !== 'true') {
-                    this.setAtHome('true').then(() => {
+                    setAtHome('true').then(() => {
                         console.log('[INFO] The user entered the house');
                     }); 
                 }
             });
         } else if (state.type !== 'none' && state.type !== 'unknown') {
-            this.getAtHome().then(atHome => {
+            getAtHome().then(atHome => {
                 console.log(`[INFO] Current network state: ${state.type} | Previous atHome state: ${atHome}`);
                 if (atHome === 'true') {
-                    this.setAtHome('false').then(() => {
+                    setAtHome('false').then(() => {
                         this.findOpenAndNotify();
                         console.log('[INFO] The user have left the house | Sending notification');
                     });

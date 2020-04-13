@@ -7,7 +7,6 @@ export const api = Axios.create({
     baseURL: apiHost,
     headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        //'Authorization': 'Basic QWRtaW46MTIzNDU='
+        'Content-Type': 'application/json'
     },
 });
