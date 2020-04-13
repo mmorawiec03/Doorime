@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 import Navigator from './homeStack';
 import LoginScreen from '../screens/loginScreen';
+import { AuthContext } from '../contexts/authContext';
 
 
 export default function AuthNavigator() {
-    const [isAuth, setIsAuth] = useState(false);
+  const { authData } = useContext(AuthContext);
 
   return (
     <View style={{flex: 1}}>
-        {isAuth ? (<Navigator />) : (<LoginScreen />)}
+        {authData.isAuth ? (<Navigator />) : (<LoginScreen />)}
     </View>
   );
 }

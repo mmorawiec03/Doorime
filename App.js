@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import AuthNavigator from './routes/authNavigator';
+import AuthContextProvider from './contexts/authContext';
 
 
 export default function App() {
 
   return (
-    <AuthNavigator />
+    <AuthContextProvider>
+      <AuthNavigator />
+    </AuthContextProvider>
   );
 }
 

@@ -30,7 +30,7 @@ export default function Devices({ navigation }) {
           ListHeaderComponent={
             <>
                 <ImageBackground source={require('../assets/devices-background.jpg')} style={globalStyles.header}>
-                  <Text style={globalStyles.titleText}>{ collection.collectionName.toUpperCase() }</Text>
+                  <Text style={globalStyles.titleText}>{ collection.collectionName && collection.collectionName.toUpperCase() }</Text>
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
                 <TouchableOpacity onPress={() => setModalOpen(true)}>

@@ -8,19 +8,22 @@ import { AntDesign, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 import { getAtHome, setAtHome } from '../storage/atHome';
-import { getAuthToken } from '../storage/token';
+import { getAuthToken, setAuthToken } from '../storage/token';
 import AddCollection from '../forms/addCollection';
+import { AuthContext } from '../contexts/authContext';
 
 
 class Home extends React.Component {
     state = {
-        user: {},
+        username: '',
         collections: [],
         userNetworks: [],
         refreshing: false,
         loading: true,
         modalOpen: false
     }
+
+    static contextType = AuthContext;
 
     componentDidMount() {
         this.getUserData();
@@ -33,20 +36,18 @@ class Home extends React.Component {
         this.getUserData();
     }
 
+    setModalOpen = (open) => this.setState({modalOpen: open});
+
     getUserData = () => {
         getAuthToken().then(token => {
             api.get('/get_all_data', { headers: { 'x-access-token': token }})
                 .then(res => {
                     return JSON.parse(res.data.result);
                 }).then(data => {
-                    console.log(data);
                     this.setState({
-                        user: {
-                           username: data.user.username,
-                           //userId: data.user.userID
-                        },
-                        // collections: data.user.collections,
-                        // userNetworks: data.user.networks,
+                        username: data.user.username,
+                        collections: data.user.collections,
+                        userNetworks: data.user.networks,
                         refreshing: false,
                         loading: false
                     });
@@ -114,7 +115,11 @@ class Home extends React.Component {
         });
     }
 
-    setModalOpen = (open) => this.setState({modalOpen: open});
+    logout = () => {
+        setAuthToken('').then(() => {
+            this.context.dispatch({type: 'LOGOUT' });
+        });
+    }
 
     render() {
         return (
@@ -153,7 +158,7 @@ class Home extends React.Component {
                         renderItem={({ item }) => (
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceScreen', {item})}>
                                 <Card>                                            
-                                    <Text style={globalStyles.titleText}>{ item.collectionName.toUpperCase() }</Text>                                            
+                                    <Text style={globalStyles.titleText}>{ item.collectionName && item.collectionName.toUpperCase() }</Text>                                            
                                     <AntDesign name='caretright' size={24} color='#00b6b6' />
                                 </Card>
                             </TouchableOpacity>
@@ -162,7 +167,7 @@ class Home extends React.Component {
                         onRefresh={this.refreshHandler}
                         ListFooterComponent={
                             <>
-                                <TouchableOpacity onPress={() => console.log('logout')}>
+                                <TouchableOpacity onPress={this.logout}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>LOGOUT</Text>                                            
                                         <MaterialCommunityIcons name='logout' size={32} color='#00b6b6' />

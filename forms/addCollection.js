@@ -9,7 +9,8 @@ const addCollectionSchema = yup.object({
     name: yup
         .string()
         .required('Name is a required field')
-        .min(3, 'Must be at least 3 characters')
+        .min(3, 'Name must be at least 3 characters')
+        .max(25, 'Name must be at most 25 characters')
 });
 
 export default function AddCollection() {

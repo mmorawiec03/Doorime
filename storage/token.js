@@ -11,7 +11,7 @@ exports.getAuthToken = async () => {
 
 exports.setAuthToken = async (token) => {
     try {
-        await AsyncStorage.setItem('stored:token', token);
+        return await AsyncStorage.setItem('stored:token', token);
     } catch (e) {
         console.log(`[ERROR] ${e}`);
     }
