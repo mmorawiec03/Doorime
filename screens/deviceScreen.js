@@ -4,6 +4,7 @@ import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
 import Card from  '../shared/Card';
 import { AntDesign, SimpleLineIcons, Entypo } from '@expo/vector-icons';
+import AddDevice from '../forms/addDevice';
 
 
 export default function Devices({ navigation }) {
@@ -21,9 +22,7 @@ export default function Devices({ navigation }) {
                 <View style={modalFormStyles.closeButtonContainer}>
                     <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setModalOpen(false)} />
                 </View>
-                <View style={modalFormStyles.formContainer}>
-                    <Text style={globalStyles.paragraph}>add device form</Text>
-                </View>
+                <AddDevice />
             </View>
         </Modal>
         

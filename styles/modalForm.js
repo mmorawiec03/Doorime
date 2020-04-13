@@ -11,6 +11,33 @@ export const modalFormStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    input: {
+        height: 50,
+        width: 300,
+        borderBottomWidth: 1,
+        borderColor: 'lightgrey',
+        padding: 5,
+        marginTop: 20,
+        marginBottom: 2,
+        fontSize: 20,
+        color: 'lightgrey'
+    },
+    buttonContainer: {
+        height: 50,
+        width: 300,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: '#00b6b6',
+        marginVertical: 20
+    },
+    buttonText: {
+        fontSize: 20
+    },
+    errorText: {
+        alignSelf: 'center',
+        color: 'lightgrey'
     }
     
 });

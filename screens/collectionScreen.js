@@ -9,6 +9,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 import { getAtHome, setAtHome } from '../storage/atHome';
 import { getAuthToken } from '../storage/token';
+import AddCollection from '../forms/addCollection';
 
 
 class Home extends React.Component {
@@ -124,9 +125,7 @@ class Home extends React.Component {
                         <View style={modalFormStyles.closeButtonContainer}>
                             <Entypo name='cross' size={36} color='#00b6b6' onPress={() => this.setModalOpen(false)} />
                         </View>
-                        <View style={modalFormStyles.formContainer}>
-                            <Text style={globalStyles.paragraph}>add collection form</Text>
-                        </View>
+                        <AddCollection />
                     </View>
                 </Modal>
 
@@ -165,7 +164,7 @@ class Home extends React.Component {
                             <>
                                 <TouchableOpacity onPress={() => console.log('logout')}>
                                     <Card>
-                                        <Text style={globalStyles.titleText}>{this.state.user.username} | LOGOUT</Text>                                            
+                                        <Text style={globalStyles.titleText}>LOGOUT</Text>                                            
                                         <MaterialCommunityIcons name='logout' size={32} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
