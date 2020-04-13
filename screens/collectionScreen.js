@@ -40,10 +40,10 @@ class Home extends React.Component {
                 }).then(data => {
                     console.log(data);
                     this.setState({
-                        // user: {
-                        //    username: data.user.username,
-                        //    userId: data.user.userID
-                        // },
+                        user: {
+                           username: data.user.username,
+                           //userId: data.user.userID
+                        },
                         // collections: data.user.collections,
                         // userNetworks: data.user.networks,
                         refreshing: false,
@@ -165,7 +165,7 @@ class Home extends React.Component {
                             <>
                                 <TouchableOpacity onPress={() => console.log('logout')}>
                                     <Card>
-                                        <Text style={globalStyles.titleText}>LOGOUT</Text>                                            
+                                        <Text style={globalStyles.titleText}>{this.state.user.username} | LOGOUT</Text>                                            
                                         <MaterialCommunityIcons name='logout' size={32} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
