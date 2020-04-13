@@ -4,7 +4,7 @@ import { loginStyles } from '../styles/login';
 import NetInfo from '@react-native-community/netinfo';
 import { api } from '../api/apiHost';
 import base64 from 'base-64';
-import { AsyncStorage } from 'react-native';
+import { getAuthToken, setAuthToken } from '../storage/token';
 
 class LoginScreen extends React.Component {
 
@@ -16,30 +16,6 @@ class LoginScreen extends React.Component {
         isAuth: false
       };
 
-    _storeData = async (token) => {
-        console.log('trying to save token');
-    try {
-        await AsyncStorage.setItem('stored:token', token);
-        console.log('token saved');
-    } catch (error) {
-        console.log('token NOT saved');
-        console.log(error);
-    }
-    };
-
-    _retrieveData = async () => {
-        try {
-            console.log('trying to get the token fron storage');
-          const value = await AsyncStorage.getItem('stored:token');
-          if (value !== null) {
-            console.log('we have our stored token!');
-            console.log(value);
-          }
-        } catch (error) {
-            console.log('we dont have a token');
-            console.log(error);
-        }
-      };
 
     getToken(method) {
         const { username, password } = this.state;
@@ -63,7 +39,7 @@ class LoginScreen extends React.Component {
         Date: ${date}
         Token: ${token}`);
 
-        this._storeData(token);
+        setAuthToken(token);
         this.setState({ 
             token: token, 
             date: date,
@@ -95,11 +71,11 @@ class LoginScreen extends React.Component {
         console.log("Executed onLogin");
     }
 
-    onSignin() {
+    async onSignin() {
         var method = 'Signin';
         //this.getToken(method);
         console.log("Executed onSignin");
-        this._retrieveData();
+        console.log(await getAuthToken());
     }
     
     render (){
