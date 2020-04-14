@@ -5,6 +5,7 @@ import { modalFormStyles } from '../styles/modalForm';
 import Card from  '../shared/Card';
 import { AntDesign, SimpleLineIcons, Entypo } from '@expo/vector-icons';
 import AddDevice from '../forms/addDevice';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function Devices({ navigation }) {
@@ -44,15 +45,20 @@ export default function Devices({ navigation }) {
           keyExtractor={(item) => item.devID.toString()}
           data={collection.devices} 
           renderItem={( {item} ) => (
-            <Card>
-              <View>
-                  <Text style={globalStyles.titleText}>{ item.deviceName }</Text>
-                  <Text style={globalStyles.paragraph}>{ item.lastStateChange }</Text>
-              </View>
-              <View>
-                <SimpleLineIcons name={iconName(item.isClosed)} size={40} color={iconColor(item.isClosed)} style={globalStyles.doorIcon}/>
-              </View>
-            </Card>
+            <LinearGradient
+              colors={['transparent',iconColor(item.isClosed)]}
+              start={[0.3, 0]} end={[4, 0]}
+              >
+              <Card>
+                <View>
+                    <Text style={globalStyles.titleText}>{ item.deviceName }</Text>
+                    <Text style={globalStyles.paragraph}>{ item.lastStateChange }</Text>
+                </View>
+                <View>
+                  <SimpleLineIcons name={iconName(item.isClosed)} size={40} color={iconColor(item.isClosed)} style={globalStyles.doorIcon}/>
+                </View>
+              </Card>
+            </LinearGradient>
           )}
         />
       </View>
