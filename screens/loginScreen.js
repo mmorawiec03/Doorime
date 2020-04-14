@@ -30,7 +30,13 @@ class LoginScreen extends React.Component {
                     errorMessage: err.response.data.message,
                     showError: true
                 });
+            } else if (String(err).includes('Network Error')){
+                this.setState({
+                    errorMessage: 'Network Error!',
+                    showError: true
+                });
             } else {
+                //console.log(err);
                 this.setState({
                     errorMessage: err,
                     showError: true
@@ -58,7 +64,7 @@ class LoginScreen extends React.Component {
                             <TouchableOpacity style={loginStyles.errorBox} onPress={() => this.setState({showError: false})}>
                                 <Text style={loginStyles.errorText}>{this.state.errorMessage}</Text>
                             </TouchableOpacity>
-                         }
+                        }
                         
                         <TextInput
                             value={this.state.username}
