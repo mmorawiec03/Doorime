@@ -38,7 +38,8 @@ class Home extends React.Component {
 
     setModalOpen = (open) => this.setState({modalOpen: open});
 
-    getUserData = () => {
+    getUserData = (callback) => {
+        console.log('[INFO] GET request | Path: /get_all_data');
         getAuthToken().then(token => {
             api.get('/get_all_data', { headers: { 'x-access-token': token }})
                 .then(res => {
@@ -51,6 +52,8 @@ class Home extends React.Component {
                         refreshing: false,
                         loading: false
                     });
+                    if (typeof callback == "function") 
+                        callback();
                 }).catch(err => {
                     console.log(`[ERROR] ${err}`);
                     this.setState({
@@ -75,10 +78,14 @@ class Home extends React.Component {
             getAtHome().then(atHome => {
                 console.log(`[INFO] Current network state: ${state.type} | Previous atHome state: ${atHome}`);
                 if (atHome === 'true') {
-                    setAtHome('false').then(() => {
-                        this.findOpenAndNotify();
-                        console.log('[INFO] The user have left the house | Sending notification');
-                    });
+                    console.log('[INFO] The user have left the house | Sending notification');
+                    setTimeout(() => {
+                        this.getUserData(
+                            setAtHome('false').then(() => {
+                                this.findOpenAndNotify();
+                            })
+                        );
+                    }, 6000);
                 }
             });
         } else {
