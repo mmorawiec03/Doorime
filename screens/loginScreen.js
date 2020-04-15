@@ -24,6 +24,7 @@ class LoginScreen extends React.Component {
     static contextType = AuthContext;
 
     login = () => {
+        console.log('[INFO] GET request | Path: /login');
         const { username, password } = this.state;
         var basicAuth = 'Basic ' + base64.encode(username + ':' + password);
 
@@ -55,8 +56,7 @@ class LoginScreen extends React.Component {
     }
 
     signup = () => {
-        console.log("sign up");
-        //getAuthToken().then(token => console.log(token));
+        console.log('[INFO] POST request | Path: /create_user');
 
         const { username, password } = this.state;
 
