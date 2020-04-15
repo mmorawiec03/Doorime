@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { modalFormStyles } from '../styles/modalForm';
+import { getAuthToken } from '../storage/token';
+import { api } from '../api/apiHost';
+import { AuthContext } from '../contexts/authContext';
+import base64 from 'base-64';
 
 
 const addCollectionSchema = yup.object({
@@ -14,22 +18,43 @@ const addCollectionSchema = yup.object({
 });
 
 export default function AddCollection() {
+    const { authData } = useContext(AuthContext);
+    const [showMessage, setShowMessage] = useState(false);
+    const [message, setMessage] = useState('');
 
-    const submitHandler = () => {
-        console.log('add collection');
-        // api.put
-        // close modal
-        // alert(message)
+    const submitHandler = (name) => {
+        console.log('[INFO] PUT request | Path: /add_collection');
+        getAuthToken().then(token => {
+            api.put(
+                '/add_collection',
+                {"collection": base64.encode(authData.username + ':' + name), "name": name},
+                { headers: { 'x-access-token': token }}
+            ).then(res => {
+                setMessage(res.data.message);
+                setShowMessage(true);
+            }).catch(err => {
+                console.log(`[ERROR] ${err}`);
+                setMessage(err.data.message);
+                setShowMessage(true);
+            });
+        });
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={modalFormStyles.formContainer}>
+                
+                {showMessage &&
+                    <TouchableOpacity style={modalFormStyles.messageBox} onPress={() => setShowMessage(false)}>
+                        <Text style={modalFormStyles.messageText}>{message}</Text>
+                    </TouchableOpacity>
+                }
+
                 <Formik 
                     initialValues={{name: ''}}
                     validationSchema={addCollectionSchema}
                     onSubmit={(values, actions) => {
-                        submitHandler();
+                        submitHandler(values.name);
                         actions.resetForm();
                         Keyboard.dismiss();
                     }}

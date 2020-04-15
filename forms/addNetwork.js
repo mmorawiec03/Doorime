@@ -1,34 +1,40 @@
-import React,  { useState } from 'react'
+import React,  { useState, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { modalFormStyles } from '../styles/modalForm';
+import Card from '../shared/Card';
 import { api } from '../api/apiHost';
 import { getAuthToken } from '../storage/token';
+import NetInfo from '@react-native-community/netinfo';
 
 
-const addDeviceSchema = yup.object({
-    name: yup
+const addNetworkSchema = yup.object({
+    ssid: yup
         .string()
-        .required('Name is a required field')
-        .min(3, 'Must be at least 3 characters')
-        .max(25, 'Name must be at most 25 characters'),
-    id: yup
-        .string()
-        .required('Id is a required field')
+        .required('Enter ssid')
 });
 
-export default function AddDevice({ colID }) {
+export default function AddNetwork() {
 
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
+    const [ssid, setSsid] = useState('');
 
-    const submitHandler = (name, id) => {
-        console.log('[INFO] PUT request | Path: /add_device');
+
+    const setCurrentNetwork = (formikProps) => {
+        NetInfo.fetch().then(state => {
+            if (state.type = 'wifi')
+                formikProps.setFieldValue('ssid', state.details.ssid)
+        });
+    }
+
+    const submitHandler = (ssid) => {
+        console.log('[INFO] PUT request | Path: /add_wifi', ssid);
         getAuthToken().then(token => {
             api.put(
-                '/add_device',
-                {"collection": colID, "device": id, "name": name},
+                '/add_wifi',
+                {"ssid": ssid},
                 { headers: { 'x-access-token': token }}
             ).then(res => {
                 setMessage(res.data.message);
@@ -52,10 +58,10 @@ export default function AddDevice({ colID }) {
                 }
                 
                 <Formik 
-                    initialValues={{name: '', id: ''}}
-                    validationSchema={addDeviceSchema}
+                    initialValues={{ssid: ssid}}
+                    validationSchema={addNetworkSchema}
                     onSubmit={(values, actions) => {
-                        submitHandler(values.name, values.id);
+                        submitHandler(values.ssid);
                         actions.resetForm();
                         Keyboard.dismiss();
                     }}
@@ -64,21 +70,16 @@ export default function AddDevice({ colID }) {
                         <View>
                             <TextInput 
                                 style={modalFormStyles.input}
-                                placeholder='Device name'
-                                onChangeText={formikProps.handleChange('name')}
-                                onBlur={formikProps.handleBlur('name')}
-                                value={formikProps.values.name}
+                                placeholder='Network identifier'
+                                onChangeText={formikProps.handleChange('ssid')}
+                                onBlur={formikProps.handleBlur('ssid')}
+                                value={formikProps.values.ssid}
                             />
-                            <Text style={modalFormStyles.errorText}>{formikProps.touched.name && formikProps.errors.name}</Text>
+                            <Text style={modalFormStyles.errorText}>{formikProps.touched.ssid && formikProps.errors.ssid}</Text>
 
-                            <TextInput 
-                                style={modalFormStyles.input}
-                                placeholder='Device identifier'
-                                onChangeText={formikProps.handleChange('id')}
-                                onBlur={formikProps.handleBlur('id')}
-                                value={formikProps.values.id}
-                            />
-                            <Text style={modalFormStyles.errorText}>{formikProps.touched.id && formikProps.errors.id}</Text>
+                            <TouchableOpacity style={modalFormStyles.buttonContainer} onPress={() => setCurrentNetwork(formikProps)}>
+                                <Text style={modalFormStyles.buttonText}>CURRENT WIFI</Text>
+                            </TouchableOpacity>
 
                             <TouchableOpacity style={modalFormStyles.buttonContainer} onPress={formikProps.handleSubmit}>
                                 <Text style={modalFormStyles.buttonText}>ADD</Text>
