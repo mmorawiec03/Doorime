@@ -30,7 +30,7 @@ export const modalFormStyles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         backgroundColor: '#00b6b6',
-        marginVertical: 20
+        marginVertical: 10
     },
     buttonText: {
         fontSize: 20
@@ -38,6 +38,21 @@ export const modalFormStyles = StyleSheet.create({
     errorText: {
         alignSelf: 'center',
         color: 'lightgrey'
+    },
+    messageBox: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 44,
+        width: '80%',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#00b6b6',
+        marginBottom: 10,
+        borderRadius: 5,
+    },
+    messageText: {
+        color: '#00b6b6',
+        fontSize: 16
     }
     
 });

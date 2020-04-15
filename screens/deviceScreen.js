@@ -1,11 +1,13 @@
 import React, { useState} from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
 import Card from  '../shared/Card';
 import { AntDesign, SimpleLineIcons, Entypo } from '@expo/vector-icons';
 import AddDevice from '../forms/addDevice';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getAuthToken } from '../storage/token';
+import { api } from '../api/apiHost';
 
 
 export default function Devices({ navigation }) {
@@ -15,6 +17,41 @@ export default function Devices({ navigation }) {
     const iconColor = (isClosed) => isClosed ? ('green') : ('red');
     const iconName = (isClosed) => isClosed ? ('lock') : ('lock-open');
 
+    const deleteDeviceAlert = (id, name) => {
+      Alert.alert(
+          'Delete device',
+          `Are you sure you want to delete ${name}?`,
+          [
+              {text: 'Delete', onPress: () => deleteDevice(id)},
+              {text: 'Cancel', style: 'cancel'}
+          ],
+          {cancelable: true}
+      )
+    }
+
+    const deleteDevice = (id) => {
+      console.log('[INFO] DELETE request | Path: /delete_device');
+        getAuthToken().then(token => {
+            api.delete(
+              '/delete_device',
+              {"device": id},
+              { headers: { 'x-access-token': token }}
+            ).then(res => {
+              Alert.alert(
+                  'Delete device',
+                  res.data.message
+              );
+            }).catch(err => {
+              console.log(`[ERROR] ${err}`);
+              Alert.alert(
+                  'Error',
+                  'Cannot delete device'
+              );
+            });
+        });
+    }
+
+
     return (
       <View style={globalStyles.container}>
         
@@ -23,7 +60,7 @@ export default function Devices({ navigation }) {
                 <View style={modalFormStyles.closeButtonContainer}>
                     <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setModalOpen(false)} />
                 </View>
-                <AddDevice />
+                <AddDevice colID={collection.colID} />
             </View>
         </Modal>
         
@@ -45,20 +82,22 @@ export default function Devices({ navigation }) {
           keyExtractor={(item) => item.devID.toString()}
           data={collection.devices} 
           renderItem={( {item} ) => (
-            <LinearGradient
-              colors={['transparent',iconColor(item.isClosed)]}
-              start={[0.3, 0]} end={[4, 0]}
-              >
-              <Card>
-                <View>
-                    <Text style={globalStyles.titleText}>{ item.deviceName }</Text>
-                    <Text style={globalStyles.paragraph}>{ item.lastStateChange }</Text>
-                </View>
-                <View>
-                  <SimpleLineIcons name={iconName(item.isClosed)} size={40} color={iconColor(item.isClosed)} style={globalStyles.doorIcon}/>
-                </View>
-              </Card>
-            </LinearGradient>
+            <TouchableOpacity onLongPress={() => deleteDeviceAlert(item.devID, item.deviceName)} >
+              <LinearGradient
+                colors={['transparent', iconColor(item.isClosed)]}
+                start={[0.6, 0]} end={[4, 0]}
+                >
+                <Card>
+                  <View>
+                      <Text style={globalStyles.titleText}>{ item.deviceName }</Text>
+                      <Text style={globalStyles.paragraph}>{ item.lastStateChange }</Text>
+                  </View>
+                  <View>
+                    <SimpleLineIcons name={iconName(item.isClosed)} size={40} color={iconColor(item.isClosed)} style={globalStyles.doorIcon}/>
+                  </View>
+                </Card>
+              </LinearGradient>
+            </TouchableOpacity>
           )}
         />
       </View>
