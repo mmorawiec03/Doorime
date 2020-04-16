@@ -17,7 +17,7 @@ const addCollectionSchema = yup.object({
         .max(25, 'Name must be at most 25 characters')
 });
 
-export default function AddCollection() {
+export default function AddCollection({ getUserData }) {
     const { authData } = useContext(AuthContext);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
@@ -32,6 +32,7 @@ export default function AddCollection() {
             ).then(res => {
                 setMessage(res.data.message);
                 setShowMessage(true);
+                getUserData();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 setMessage(err.data.message);

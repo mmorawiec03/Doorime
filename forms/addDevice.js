@@ -18,7 +18,7 @@ const addDeviceSchema = yup.object({
         .required('Id is a required field')
 });
 
-export default function AddDevice({ colID }) {
+export default function AddDevice({ colID, getUserData }) {
 
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
@@ -33,6 +33,7 @@ export default function AddDevice({ colID }) {
             ).then(res => {
                 setMessage(res.data.message);
                 setShowMessage(true);
+                getUserData();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 setMessage(err.data.message);

@@ -121,12 +121,12 @@ class Home extends React.Component {
         );
     }
 
-    deleteCollectionAlert = (name) => {
+    deleteCollectionAlert = (id, name) => {
         Alert.alert(
             'Delete collection',
             `Are you sure you want to delete ${name} collection?`,
             [
-                {text: 'Delete', onPress: () => this.deleteCollection(name)},
+                {text: 'Delete', onPress: () => this.deleteCollection(id)},
                 {text: 'Cancel', style: 'cancel'}
             ],
             {cancelable: true}
@@ -175,18 +175,18 @@ class Home extends React.Component {
         });
     }
 
-    deleteCollection = (name) => {
+    deleteCollection = (id) => {
         console.log('[INFO] DELETE request | Path: /delete_collection');
         getAuthToken().then(token => {
-            api.delete(
-                '/delete_collection',
-                {"collection": name},
-                { headers: { 'x-access-token': token }}
-            ).then(res => {
+            api.delete('/delete_collection', {
+                data: {"collection": id},
+                headers: { 'x-access-token': token }
+            }).then(res => {
                 Alert.alert(
                     'Delete collection',
                     res.data.message
                 );
+                this.getUserData();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 Alert.alert(
@@ -200,15 +200,15 @@ class Home extends React.Component {
     deleteNetwork = (ssid) => {
         console.log('[INFO] DELETE request | Path: /delete_wifi');
         getAuthToken().then(token => {
-            api.delete(
-                '/delete_wifi',
-                {"ssid": ssid},
-                { headers: { 'x-access-token': token }}
-            ).then(res => {
+            api.delete('/delete_wifi', {
+                    data: {"ssid": ssid},
+                    headers: { 'x-access-token': token }
+            }).then(res => {
                 Alert.alert(
                     'Delete wifi',
                     res.data.message
                 );
+                this.getUserData();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 Alert.alert(
@@ -228,7 +228,7 @@ class Home extends React.Component {
                         <View style={modalFormStyles.closeButtonContainer}>
                             <Entypo name='cross' size={36} color='#00b6b6' onPress={() => this.setAddColOpen(false)} />
                         </View>
-                        <AddCollection />
+                        <AddCollection getUserData={this.getUserData} />
                     </View>
                 </Modal>
 
@@ -239,7 +239,7 @@ class Home extends React.Component {
                         </View>
                         <FlatList
                             ListHeaderComponent={
-                                <AddNetwork />
+                                <AddNetwork getUserData={this.getUserData} />
                             }
                             data={this.state.userNetworks}
                             renderItem={({ item }) => (
@@ -284,8 +284,8 @@ class Home extends React.Component {
                         data={this.state.collections}
                         renderItem={({ item }) => (
                             <TouchableOpacity 
-                                onPress={() => this.props.navigation.navigate('DeviceScreen', {item})} 
-                                onLongPress={() => this.deleteCollectionAlert(item.collectionName)}
+                                onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})} 
+                                onLongPress={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
                             >
                                 <Card>                                            
                                     <Text style={globalStyles.titleText}>{ item.collectionName && item.collectionName }</Text>                                            

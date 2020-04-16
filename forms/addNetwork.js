@@ -15,7 +15,7 @@ const addNetworkSchema = yup.object({
         .required('Enter ssid')
 });
 
-export default function AddNetwork() {
+export default function AddNetwork({ getUserData }) {
 
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
@@ -39,6 +39,7 @@ export default function AddNetwork() {
             ).then(res => {
                 setMessage(res.data.message);
                 setShowMessage(true);
+                getUserData();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 setMessage(err.data.message);

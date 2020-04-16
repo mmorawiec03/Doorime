@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
@@ -17,6 +17,8 @@ export default function Devices({ navigation }) {
     const iconColor = (isClosed) => isClosed ? ('green') : ('red');
     const iconName = (isClosed) => isClosed ? ('lock') : ('lock-open');
 
+    const getUserData = navigation.getParam('getUserData');
+
     const deleteDeviceAlert = (id, name) => {
       Alert.alert(
           'Delete device',
@@ -32,15 +34,15 @@ export default function Devices({ navigation }) {
     const deleteDevice = (id) => {
       console.log('[INFO] DELETE request | Path: /delete_device');
         getAuthToken().then(token => {
-            api.delete(
-              '/delete_device',
-              {"device": id},
-              { headers: { 'x-access-token': token }}
-            ).then(res => {
+            api.delete('/delete_device', {
+              data: {"device": id},
+              headers: { 'x-access-token': token }
+            }).then(res => {
               Alert.alert(
                   'Delete device',
                   res.data.message
               );
+              getUserData();
             }).catch(err => {
               console.log(`[ERROR] ${err}`);
               Alert.alert(
@@ -60,7 +62,7 @@ export default function Devices({ navigation }) {
                 <View style={modalFormStyles.closeButtonContainer}>
                     <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setModalOpen(false)} />
                 </View>
-                <AddDevice colID={collection.colID} />
+                <AddDevice colID={collection.colID} getUserData={getUserData} />
             </View>
         </Modal>
         
