@@ -8,6 +8,7 @@ import AddDevice from '../forms/addDevice';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuthToken } from '../storage/token';
 import { api } from '../api/apiHost';
+import PopupCard from '../shared/popupCard';
 
 
 export default function Devices({ navigation }) {
@@ -84,7 +85,13 @@ export default function Devices({ navigation }) {
           keyExtractor={(item) => item.devID.toString()}
           data={collection.devices} 
           renderItem={( {item} ) => (
-            <TouchableOpacity onLongPress={() => deleteDeviceAlert(item.devID, item.deviceName)} >
+            <PopupCard
+              idKey={"device"}
+              id={item.devID}
+              path={'/rename_device'}
+              getUserData={getUserData}
+              onDelete={() => deleteDeviceAlert(item.devID, item.deviceName)}
+            >
               <LinearGradient
                 colors={['transparent', iconColor(item.isClosed)]}
                 start={[0.6, 0]} end={[4, 0]}
@@ -99,7 +106,7 @@ export default function Devices({ navigation }) {
                   </View>
                 </Card>
               </LinearGradient>
-            </TouchableOpacity>
+            </PopupCard>
           )}
         />
       </View>

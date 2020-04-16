@@ -42,7 +42,7 @@ export const modalFormStyles = StyleSheet.create({
     messageBox: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: 44,
+        minHeight: 44,
         width: '80%',
         padding: 10,
         borderWidth: 1,

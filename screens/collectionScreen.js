@@ -11,7 +11,8 @@ import { getAtHome, setAtHome } from '../storage/atHome';
 import { getAuthToken, setAuthToken } from '../storage/token';
 import AddCollection from '../forms/addCollection';
 import { AuthContext } from '../contexts/authContext';
-import AddNetwork from '../forms/addNetwork'
+import AddNetwork from '../forms/addNetwork';
+import PopupCard from '../shared/popupCard';
 
 
 class Home extends React.Component {
@@ -219,6 +220,11 @@ class Home extends React.Component {
         });
     }
 
+    // <TouchableOpacity 
+    //     onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})} 
+    //     onLongPress={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
+    // >
+
     render() {
         return (
             <View style={globalStyles.container}>
@@ -283,15 +289,19 @@ class Home extends React.Component {
                         keyExtractor={(item) => item.colID.toString()}
                         data={this.state.collections}
                         renderItem={({ item }) => (
-                            <TouchableOpacity 
-                                onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})} 
-                                onLongPress={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
+                            <PopupCard
+                                idKey={'collection'}
+                                id={item.colID}
+                                path={'/rename_collection'}
+                                getUserData={this.getUserData}
+                                onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})}
+                                onDelete={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
                             >
                                 <Card>                                            
                                     <Text style={globalStyles.titleText}>{ item.collectionName && item.collectionName }</Text>                                            
                                     <AntDesign name='caretright' size={24} color='#00b6b6' />
                                 </Card>
-                            </TouchableOpacity>
+                            </PopupCard>
                         )}
                         refreshing={this.state.refreshing}
                         onRefresh={this.refreshHandler}
