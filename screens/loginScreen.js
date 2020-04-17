@@ -3,7 +3,8 @@ import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Keyboard
 import { loginStyles } from '../styles/login';
 import { api } from '../api/apiHost';
 import base64 from 'base-64';
-import { getAuthToken, setAuthToken } from '../storage/token';
+import { setAuthToken } from '../storage/token';
+import { setAuthData } from '../storage/authData';
 import { AuthContext } from '../contexts/authContext';
 
 class LoginScreen extends React.Component {
@@ -30,6 +31,7 @@ class LoginScreen extends React.Component {
 
         api.get('/login', { headers: { 'Authorization': basicAuth }}).then(res => {
             setAuthToken(res.data.token);
+            setAuthData({"username": username, "isAuth": true});
             this.context.dispatch({type: 'LOGIN', username });
         }).catch(err => {
             if(err.response != undefined && err.response.status === 401){
