@@ -146,6 +146,18 @@ class Home extends React.Component {
         )
     }
 
+    deleteUserAlert = () => {
+        Alert.alert(
+            'Delete account',
+            `Are you sure you want to delete your account?`,
+            [
+                {text: 'Delete', onPress: this.deleteUser},
+                {text: 'Cancel', style: 'cancel'}
+            ],
+            {cancelable: true}
+        )
+    }
+
     // ---------------- HTTP REQUESTS --------------------
 
     getUserData = (callback) => {
@@ -220,10 +232,27 @@ class Home extends React.Component {
         });
     }
 
-    // <TouchableOpacity 
-    //     onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})} 
-    //     onLongPress={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
-    // >
+    deleteUser = () => {
+        console.log('[INFO] DELETE request | Path: /delete_user');
+        getAuthToken().then(token => {
+            api.delete('/delete_user', {
+                    headers: { 'x-access-token': token }
+            }).then(res => {
+                Alert.alert(
+                    'Delete account',
+                    res.data.message
+                );
+                if (res.data.message.includes('The user has been deleted'))
+                    this.logout();
+            }).catch(err => {
+                console.log(`[ERROR] ${err}`);
+                Alert.alert(
+                    'Error',
+                    'Cannot delete account'
+                );
+            });
+        });
+    }
 
     render() {
         return (
@@ -307,6 +336,12 @@ class Home extends React.Component {
                         onRefresh={this.refreshHandler}
                         ListFooterComponent={
                             <>
+                                <TouchableOpacity onPress={this.deleteUserAlert}>
+                                    <Card>
+                                        <Text style={globalStyles.titleText}>DELETE ACCOUNT</Text>                                            
+                                        <AntDesign name='deleteuser' size={30} color='#00b6b6' />
+                                    </Card>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={this.logoutAlert}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>LOGOUT</Text>                                            

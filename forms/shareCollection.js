@@ -1,31 +1,28 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { modalFormStyles } from '../styles/modalForm';
-import { api } from '../api/apiHost';
 import { getAuthToken } from '../storage/token';
+import { api } from '../api/apiHost';
 
 
-const renameSchema = yup.object({
-    newName: yup
+const shareCollectionSchema = yup.object({
+    login: yup
         .string()
-        .required('Enter new name')
+        .required('Enter the successor username')
 });
 
-export default function Rename({ idKey, id, path, getUserData }) {
-
+export default function ShareCollection({ getUserData, colID }) {
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
 
-    const submitHandler = (newName) => {
-        console.log(`[INFO] PUT request | Path: ${path}`);
-        let content = {'new name': newName}
-        content[idKey] = id;
+    const submitHandler = (login) => {
+        console.log('[INFO] POST request | Path: /share_collection');
         getAuthToken().then(token => {
-            api.put(
-                path,
-                content,
+            api.post(
+                '/share_collection',
+                {"collection": colID, "successor": login},
                 { headers: { 'x-access-token': token }}
             ).then(res => {
                 setMessage(res.data.message);
@@ -50,10 +47,10 @@ export default function Rename({ idKey, id, path, getUserData }) {
                 }
 
                 <Formik 
-                    initialValues={{newName: ''}}
-                    validationSchema={renameSchema}
+                    initialValues={{login: ''}}
+                    validationSchema={shareCollectionSchema}
                     onSubmit={(values, actions) => {
-                        submitHandler(values.newName);
+                        submitHandler(values.login);
                         actions.resetForm();
                         Keyboard.dismiss();
                     }}
@@ -62,15 +59,15 @@ export default function Rename({ idKey, id, path, getUserData }) {
                         <View>
                             <TextInput 
                                 style={modalFormStyles.input}
-                                placeholder='New name'
-                                onChangeText={formikProps.handleChange('newName')}
-                                onBlur={formikProps.handleBlur('newName')}
-                                value={formikProps.values.newName}
+                                placeholder='Successor username'
+                                onChangeText={formikProps.handleChange('login')}
+                                onBlur={formikProps.handleBlur('login')}
+                                value={formikProps.values.login}
                             />
-                            <Text style={modalFormStyles.errorText}>{formikProps.touched.newName && formikProps.errors.newName}</Text>
+                            <Text style={modalFormStyles.errorText}>{formikProps.touched.login && formikProps.errors.login}</Text>
 
                             <TouchableOpacity style={modalFormStyles.buttonContainer} onPress={formikProps.handleSubmit}>
-                                <Text style={modalFormStyles.buttonText}>RENAME</Text>
+                                <Text style={modalFormStyles.buttonText}>SHARE</Text>
                             </TouchableOpacity>
                         </View>
                     )}

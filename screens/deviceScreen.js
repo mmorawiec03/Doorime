@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert, Share } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
 import Card from  '../shared/Card';
@@ -9,11 +9,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuthToken } from '../storage/token';
 import { api } from '../api/apiHost';
 import PopupCard from '../shared/popupCard';
+import ShareCollection from '../forms/shareCollection';
 
 
 export default function Devices({ navigation }) {
     const [collection, setCollection] = useState(navigation.getParam('item'));
-    const [modalOpen, setModalOpen] = useState(false);
+    const [addDevOpen, setAddDevOpen] = useState(false);
+    const [shareOpen, setShareOpen] = useState(false);
 
     const iconColor = (isClosed) => isClosed ? ('green') : ('red');
     const iconName = (isClosed) => isClosed ? ('lock') : ('lock-open');
@@ -58,12 +60,21 @@ export default function Devices({ navigation }) {
     return (
       <View style={globalStyles.container}>
         
-        <Modal visible={modalOpen} animationType='slide'>
+        <Modal visible={addDevOpen} animationType='slide'>
             <View style={globalStyles.container}>
                 <View style={modalFormStyles.closeButtonContainer}>
-                    <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setModalOpen(false)} />
+                    <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setAddDevOpen(false)} />
                 </View>
                 <AddDevice colID={collection.colID} getUserData={getUserData} />
+            </View>
+        </Modal>
+
+        <Modal visible={shareOpen} animationType='slide'>
+            <View style={globalStyles.container}>
+                <View style={modalFormStyles.closeButtonContainer}>
+                    <Entypo name='cross' size={36} color='#00b6b6' onPress={() => setShareOpen(false)} />
+                </View>
+                <ShareCollection colID={collection.colID} getUserData={getUserData} />
             </View>
         </Modal>
         
@@ -74,10 +85,16 @@ export default function Devices({ navigation }) {
                   <Text style={globalStyles.titleText}>{ collection.collectionName && collection.collectionName.toUpperCase() }</Text>
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
-                <TouchableOpacity onPress={() => setModalOpen(true)}>
+                <TouchableOpacity onPress={() => setAddDevOpen(true)}>
                     <Card>
                         <Text style={globalStyles.titleText}>ADD DEVICE</Text>                                            
                         <AntDesign name='pluscircle' size={24} color='#00b6b6' />
+                    </Card>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShareOpen(true)}>
+                    <Card>
+                        <Text style={globalStyles.titleText}>SHARE COLLECTION</Text>                                            
+                        <Entypo name='share' size={28} color='#00b6b6' />
                     </Card>
                 </TouchableOpacity>
             </>
