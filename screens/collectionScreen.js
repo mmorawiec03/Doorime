@@ -13,6 +13,7 @@ import AddCollection from '../forms/addCollection';
 import { AuthContext } from '../contexts/authContext';
 import AddNetwork from '../forms/addNetwork';
 import PopupCard from '../shared/popupCard';
+import { setAuthData } from '../storage/authData';
 
 
 class Home extends React.Component {
@@ -44,6 +45,7 @@ class Home extends React.Component {
 
     logout = () => {
         setAuthToken('').then(() => {
+            setAuthData({"username": '', "isAuth": false});
             this.context.dispatch({type: 'LOGOUT' });
         });
     }
