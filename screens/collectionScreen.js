@@ -14,7 +14,8 @@ import { AuthContext } from '../contexts/authContext';
 import AddNetwork from '../forms/addNetwork';
 import PopupCard from '../shared/popupCard';
 import { setAuthData } from '../storage/authData';
-
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
 
 class Home extends React.Component {
     state = {
@@ -303,18 +304,23 @@ class Home extends React.Component {
                                 <View style={globalStyles.header}>
                                     <Image source={require('../assets/smart-home.jpg')} style={globalStyles.headerImage} opacity={0.5} />  
                                 </View>
-                                <TouchableOpacity onPress={() => this.setAddColOpen(true)} >
+                                <LinearGradient
+                                colors={['transparent', '#00b6b6']}
+                                start={[1, 0]} end={[-4, 0]}
+                                >
+                                <TouchableOpacity onPress={() => this.setAddColOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>ADD COLLECTION</Text>                                            
                                         <AntDesign name='pluscircle' size={24} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.setNetOpen(true)} >
+                                <TouchableOpacity onPress={() => this.setNetOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>MY NETWORKS</Text>                                            
                                         <AntDesign name='wifi' size={24} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
+                                </LinearGradient>
                             </>
                         }
                         keyExtractor={(item) => item.colID.toString()}
@@ -325,7 +331,7 @@ class Home extends React.Component {
                                 id={item.colID}
                                 path={'/rename_collection'}
                                 getUserData={this.getUserData}
-                                onPress={() => this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData})}
+                                onPress={() => {this.props.navigation.navigate('DeviceScreen', {item, getUserData: this.getUserData}); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
                                 onDelete={() => this.deleteCollectionAlert(item.colID, item.collectionName)}
                             >
                                 <Card>                                            
@@ -338,18 +344,23 @@ class Home extends React.Component {
                         onRefresh={this.refreshHandler}
                         ListFooterComponent={
                             <>
-                                <TouchableOpacity onPress={this.deleteUserAlert}>
+                            <LinearGradient
+                                colors={['transparent', '#FF0000']}
+                                start={[1, 0]} end={[-4, 0]}
+                                >
+                                <TouchableOpacity onPress={this.deleteUserAlert} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>DELETE ACCOUNT</Text>                                            
                                         <AntDesign name='deleteuser' size={30} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.logoutAlert}>
+                                <TouchableOpacity onPress={this.logoutAlert} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>LOGOUT</Text>                                            
                                         <MaterialCommunityIcons name='logout' size={32} color='#00b6b6' />
                                     </Card>
                                 </TouchableOpacity>
+                            </LinearGradient>
                             </>
                         }
                     />
