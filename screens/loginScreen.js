@@ -6,6 +6,7 @@ import base64 from 'base-64';
 import { setAuthToken } from '../storage/token';
 import { setAuthData } from '../storage/authData';
 import { AuthContext } from '../contexts/authContext';
+import * as Haptics from 'expo-haptics';
 
 class LoginScreen extends React.Component {
 
@@ -57,6 +58,7 @@ class LoginScreen extends React.Component {
         
     }
 
+    
     signup = () => {
         console.log('[INFO] POST request | Path: /create_user');
 
@@ -107,7 +109,7 @@ class LoginScreen extends React.Component {
                     <View style={loginStyles.inputContainer}>
                         
                         {this.state.showError &&
-                            <TouchableOpacity style={[loginStyles.errorBox, { borderColor: this.messageColor(this.state.isBad) }]} onPress={() => this.setState({showError: false})}>
+                            <TouchableOpacity style={[loginStyles.errorBox, { borderColor: this.messageColor(this.state.isBad) }]} onPress={() => this.setState({showError: false})} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                 <Text style={[loginStyles.errorText, { color: this.messageColor(this.state.isBad) }]}>{this.state.errorMessage}</Text>
                             </TouchableOpacity>
                         }
@@ -117,7 +119,8 @@ class LoginScreen extends React.Component {
                             onChangeText={(username) => this.setState({ username })}
                             placeholder={'Username'}
                             style={loginStyles.input}
-                            placeholderTextColor="#000" 
+                            placeholderTextColor="#000"
+                            onFocus={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
                         />
                         <TextInput
                             value={this.state.password}
@@ -126,13 +129,14 @@ class LoginScreen extends React.Component {
                             secureTextEntry={true}
                             style={loginStyles.input}
                             placeholderTextColor="#000" 
+                            onFocus={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
                         />
                     </View> 
                     <View style={loginStyles.buttonContainer}>
-                        <TouchableOpacity style={loginStyles.buttonLogin} onPress={this.login.bind(this)}>
+                        <TouchableOpacity style={loginStyles.buttonLogin} onPress={this.login.bind(this)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                             <Text style={loginStyles.buttonText}>Log in</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={loginStyles.buttonSignin} onPress={this.signup.bind(this)}>
+                        <TouchableOpacity style={loginStyles.buttonSignin} onPress={this.signup.bind(this)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                             <Text style={loginStyles.buttonText}>Sign up</Text>
                         </TouchableOpacity>
                     </View>

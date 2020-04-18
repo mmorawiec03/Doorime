@@ -10,7 +10,7 @@ import { getAuthToken } from '../storage/token';
 import { api } from '../api/apiHost';
 import PopupCard from '../shared/popupCard';
 import ShareCollection from '../forms/shareCollection';
-
+import * as Haptics from 'expo-haptics';
 
 export default function Devices({ navigation }) {
     const [collection, setCollection] = useState(navigation.getParam('item'));
@@ -85,18 +85,23 @@ export default function Devices({ navigation }) {
                   <Text style={globalStyles.titleText}>{ collection.collectionName && collection.collectionName.toUpperCase() }</Text>
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
-                <TouchableOpacity onPress={() => setAddDevOpen(true)}>
-                    <Card>
-                        <Text style={globalStyles.titleText}>ADD DEVICE</Text>                                            
-                        <AntDesign name='pluscircle' size={24} color='#00b6b6' />
-                    </Card>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setShareOpen(true)}>
-                    <Card>
-                        <Text style={globalStyles.titleText}>SHARE COLLECTION</Text>                                            
-                        <Entypo name='share' size={28} color='#00b6b6' />
-                    </Card>
-                </TouchableOpacity>
+                <LinearGradient
+                                colors={['transparent', '#00b6b6']}
+                                start={[1, 0]} end={[-4, 0]}
+                                >
+                  <TouchableOpacity onPress={() => setAddDevOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
+                      <Card>
+                          <Text style={globalStyles.titleText}>ADD DEVICE</Text>                                            
+                          <AntDesign name='pluscircle' size={24} color='#00b6b6' />
+                      </Card>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setShareOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
+                      <Card>
+                          <Text style={globalStyles.titleText}>SHARE COLLECTION</Text>                                            
+                          <Entypo name='share' size={28} color='#00b6b6' />
+                      </Card>
+                  </TouchableOpacity>
+                </LinearGradient>
             </>
           }
           keyExtractor={(item) => item.devID.toString()}
