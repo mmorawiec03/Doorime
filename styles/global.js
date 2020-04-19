@@ -18,8 +18,8 @@ export const globalStyles = StyleSheet.create({
   headerImage: {
     flex: 1,
     width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: 'rgba(0, 0, 0, 0.1)',
     borderBottomWidth: 1,
   },
@@ -27,6 +27,12 @@ export const globalStyles = StyleSheet.create({
     fontSize: 20,
     color: 'lightgrey',
     textShadowColor: 'black',
+    textShadowRadius: 10,
+  },
+  highlighted: {
+    fontSize: 20,
+    color: 'lightgrey',
+    textShadowColor: '#00b6b6',
     textShadowRadius: 10,
   },
   paragraph: {

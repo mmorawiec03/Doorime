@@ -39,7 +39,7 @@ async function backgroundTasks() {
   await BackgroundFetch.getStatusAsync();
   console.log(BackgroundFetch.Status.Available ? ('Background Tasks Available') : ('Background Tasks Unavailable'));
   if(BackgroundFetch.Status.Available){
-    BackgroundFetch.registerTaskAsync(BACKGROUND_SESSION_KEEPALIVE, {startOnBoot: true, stopOnTerminate: false, minimumInterval: 10});
+    BackgroundFetch.registerTaskAsync(BACKGROUND_SESSION_KEEPALIVE, {startOnBoot: true, stopOnTerminate: false, minimumInterval: 300});
     listBackgroundTasks();
   }
 }
