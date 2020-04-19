@@ -81,7 +81,7 @@ export default function Devices({ navigation }) {
         <FlatList
           ListHeaderComponent={
             <>
-                <ImageBackground source={require('../assets/background-clouds.jpg')} opacity={0.5} style={globalStyles.header}>
+                <ImageBackground source={require('../assets/background-doors_3.jpg')} opacity={0.5} style={globalStyles.header}>
                   <Text style={globalStyles.titleText}>{ collection.collectionName && collection.collectionName.toUpperCase() }</Text>
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
