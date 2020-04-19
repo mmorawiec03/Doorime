@@ -1,18 +1,18 @@
-import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 exports.getAuthToken = async () => {
     try {
-        return await AsyncStorage.getItem('stored:token');
+        return await SecureStore.getItemAsync('storage.token');
     } catch (e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[GETAUTHTOKEN ERROR] ${e}`);
         return null;
     }
 };
 
 exports.setAuthToken = async (token) => {
     try {
-        return await AsyncStorage.setItem('stored:token', token);
+        return await SecureStore.setItemAsync('storage.token', token);
     } catch (e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[SETAUTHTOKEN ERROR] ${e}`);
     }
 };

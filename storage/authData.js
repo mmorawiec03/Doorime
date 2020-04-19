@@ -1,17 +1,17 @@
-import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 exports.setAuthData = async (data) => {
     try {
-        return await AsyncStorage.setItem('@authData', JSON.stringify(data));
+        return await SecureStore.setItemAsync('storage.authData', JSON.stringify(data));
     } catch (e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[SETAUTHDATA ERROR] ${e}`);
     }
 }
 
 exports.getAuthData = async () => {
     try {
-        return JSON.parse(await AsyncStorage.getItem('@authData'));
+        return JSON.parse(await SecureStore.getItemAsync('storage.authData'));
     } catch(e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[GETAUTHDATA ERROR] ${e}`);
     }
 }

@@ -32,7 +32,7 @@ class LoginScreen extends React.Component {
 
         api.get('/login', { headers: { 'Authorization': basicAuth }}).then(res => {
             setAuthToken(res.data.token);
-            setAuthData({"username": username, "isAuth": true});
+            setAuthData({"username": username, "basicAuth": basicAuth, "isAuth": true});
             this.context.dispatch({type: 'LOGIN', username });
         }).catch(err => {
             if(err.response != undefined && err.response.status === 401){

@@ -1,17 +1,17 @@
-import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 exports.setAtHome = async (atHome) => {
     try {
-        return await AsyncStorage.setItem('@atHome', atHome);
+        return await SecureStore.setItemAsync('storage.atHome', atHome);
     } catch (e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[SETATHOME ERROR] ${e}`);
     }
 }
 
 exports.getAtHome = async () => {
     try {
-        return await AsyncStorage.getItem('@atHome');
+        return await SecureStore.getItemAsync('storage.atHome');
     } catch(e) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[GETATHOME ERROR] ${e}`);
     }
 }
