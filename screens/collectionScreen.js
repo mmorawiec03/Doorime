@@ -302,7 +302,7 @@ class Home extends React.Component {
                         ListHeaderComponent={
                             <>
                                 <View style={globalStyles.header}>
-                                    <ImageBackground source={require('../assets/collections-background_2.jpg')} style={globalStyles.headerImage} opacity={0.5}>
+                                    <ImageBackground source={require('../assets/background-doors.jpg')} style={globalStyles.headerImage} opacity={0.5}>
                                         <Text style={globalStyles.titleText}>WELCOME <Text style={globalStyles.highlighted}>{this.state.username.toUpperCase()}</Text></Text>
                                     </ImageBackground>  
                                 </View>
