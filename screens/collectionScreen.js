@@ -1,5 +1,5 @@
 import React  from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Modal, Alert } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Modal, Alert, ImageBackground } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
@@ -302,7 +302,9 @@ class Home extends React.Component {
                         ListHeaderComponent={
                             <>
                                 <View style={globalStyles.header}>
-                                    <Image source={require('../assets/smart-home.jpg')} style={globalStyles.headerImage} opacity={0.5} />  
+                                    <ImageBackground source={require('../assets/collections-background_2.jpg')} style={globalStyles.headerImage} opacity={0.5}>
+                                        <Text style={globalStyles.titleText}>WELCOME <Text style={globalStyles.highlighted}>{this.state.username.toUpperCase()}</Text></Text>
+                                    </ImageBackground>  
                                 </View>
                                 <LinearGradient
                                 colors={['transparent', '#00b6b6']}
