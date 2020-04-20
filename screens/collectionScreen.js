@@ -307,8 +307,8 @@ class Home extends React.Component {
                                     </ImageBackground>  
                                 </View>
                                 <LinearGradient
-                                    colors={['transparent', '#00b6b6']}
-                                    start={[0.6, 0]}
+                                    colors={['transparent', 'rgba(0, 182, 182, 0.5)']}
+                                    start={[0.7, 0]}
                                     end={[4, 0]}
                                 >
                                 <TouchableOpacity onPress={() => this.setAddColOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
@@ -348,8 +348,8 @@ class Home extends React.Component {
                         ListFooterComponent={
                             <>
                             <LinearGradient
-                                colors={['transparent', '#b40000']}
-                                start={[0.6, 0]}
+                                colors={['transparent', 'rgba(180, 0, 0, 0.5)']}
+                                start={[0.7, 0]}
                                 end={[4, 0]}
                             >
                                 <TouchableOpacity onPress={this.deleteUserAlert} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
