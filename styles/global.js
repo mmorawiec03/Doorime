@@ -41,4 +41,15 @@ export const globalStyles = StyleSheet.create({
     textShadowColor: 'black',
     textShadowRadius: 10,
   },
+  darkBackdround: {
+    backgroundColor: 'rgba(0,0,0,0.4)', 
+    borderRadius: 5
+  },
+  welcomeText: {
+    fontSize: 20,
+    color: 'lightgrey',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+    padding: 5
+  },
 });

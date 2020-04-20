@@ -300,7 +300,7 @@ class Home extends React.Component {
                             <>
                                 <View style={globalStyles.header}>
                                     <ImageBackground source={require('../assets/collections-background.jpg')} style={globalStyles.headerImage} opacity={0.5}>
-                                        <Text style={globalStyles.titleText}>WELCOME {this.state.username.toUpperCase()}</Text>
+                                        <View style={globalStyles.darkBackdround}><Text style={globalStyles.welcomeText}>WELCOME {this.state.username.toUpperCase()}</Text></View>
                                     </ImageBackground>  
                                 </View>
                                 <LinearGradient
