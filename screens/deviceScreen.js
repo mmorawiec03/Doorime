@@ -86,9 +86,8 @@ export default function Devices({ navigation }) {
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
                 <LinearGradient
-                  colors={['transparent', 'rgba(0, 182, 182, 0.5)']}
-                  start={[0.7, 0]}
-                  end={[4, 0]}
+                  colors={['transparent', '#00b6b6']}
+                  start={[0.6, 0]} end={[5, 0]}
                 >
                   <TouchableOpacity onPress={() => setAddDevOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                       <Card>
@@ -117,7 +116,7 @@ export default function Devices({ navigation }) {
             >
               <LinearGradient
                 colors={['transparent', iconColor(item.isClosed)]}
-                start={[0.7, 0]}
+                start={[0.6, 0]}
                 end={[4, 0]}
               >
                 <Card>
