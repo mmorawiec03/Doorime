@@ -59,7 +59,7 @@ class Home extends React.Component {
                 console.log(`[INFO] Connected to ${state.details.ssid} | Previous atHome state: ${atHome}`);
                 if (atHome !== 'true') {
                     setAtHome('true').then(() => {
-                        console.log('[INFO] The user entered the house');
+                        console.log('[INFO] The user has entered the house');
                     }); 
                 }
             });
@@ -67,14 +67,12 @@ class Home extends React.Component {
             getAtHome().then(atHome => {
                 console.log(`[INFO] Current network state: ${state.type} | Previous atHome state: ${atHome}`);
                 if (atHome === 'true') {
-                    console.log('[INFO] The user have left the house | Sending notification');
-                    setTimeout(() => {
-                        this.getUserData(
-                            setAtHome('false').then(() => {
-                                this.findOpenAndNotify();
-                            })
-                        );
-                    }, 6000);
+                    console.log('[INFO] The user has left the house | Sending notification');
+                    setAtHome('false').then(() => {
+                        setTimeout(() => {
+                            this.getUserData(this.findOpenAndNotify());
+                        }, 8000);
+                    });
                 }
             });
         } else {
@@ -84,15 +82,14 @@ class Home extends React.Component {
       
 
     findOpenAndNotify = () => {
-        let openList = this.state.collections.map(collection => {
+        this.state.collections.map(collection => {
             return ({
                 collection: collection.collectionName,
                 devices: collection.devices.filter(device => {
                     return !device.isClosed;
                 })
             });
-        });
-        openList.forEach(collection => {
+        }).forEach(collection => {
             collection.devices.forEach(device => {
                 this.notification(collection.collection, `${device.deviceName} is open!`);
             });
