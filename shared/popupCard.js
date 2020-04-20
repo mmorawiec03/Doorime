@@ -34,18 +34,22 @@ export default function PopupCard({ children, onDelete, onPress, idKey, id, path
             </TouchableOpacity>
             {showPopup &&
                 <View>
-                    <TouchableOpacity onPress={() => setOpenModal(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
-                        <Card>
-                            <Text style={globalStyles.paragraph}>RENAME</Text>                                            
-                            <AntDesign name='edit' size={24} color='#00b6b6' />
-                        </Card>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={onDelete} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
-                        <Card>
-                            <Text style={globalStyles.paragraph}>DELETE</Text>                                            
-                            <AntDesign name='delete' size={24} color='#00b6b6' />
-                        </Card>
-                    </TouchableOpacity>
+                    <LinearGradient
+                    colors={['transparent', '#00b6b6']}
+                    start={[0.6, 0]} end={[5, 0]}>
+                        <TouchableOpacity onPress={() => setOpenModal(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
+                            <Card>
+                                <Text style={globalStyles.paragraph}>RENAME</Text>                                            
+                                <AntDesign name='edit' size={24} color='#00b6b6' />
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={onDelete} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
+                            <Card>
+                                <Text style={globalStyles.paragraph}>DELETE</Text>                                            
+                                <AntDesign name='delete' size={24} color='#00b6b6' />
+                            </Card>
+                        </TouchableOpacity>
+                    </LinearGradient>
                 </View>
             }
         </View>
