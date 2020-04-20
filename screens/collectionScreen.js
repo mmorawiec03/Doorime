@@ -46,7 +46,7 @@ class Home extends React.Component {
 
     logout = () => {
         setAuthToken('').then(() => {
-            setAuthData({"username": '', "isAuth": false});
+            setAuthData({"username": '', "basicAuth": '', "isAuth": false});
             this.context.dispatch({type: 'LOGOUT' });
         });
     }
