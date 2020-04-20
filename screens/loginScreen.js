@@ -30,32 +30,40 @@ class LoginScreen extends React.Component {
         const { username, password } = this.state;
         var basicAuth = 'Basic ' + base64.encode(username + ':' + password);
 
-        api.get('/login', { headers: { 'Authorization': basicAuth }}).then(res => {
-            setAuthToken(res.data.token);
-            setAuthData({"username": username, "basicAuth": basicAuth, "isAuth": true});
-            this.context.dispatch({type: 'LOGIN', username });
-        }).catch(err => {
-            if(err.response != undefined && err.response.status === 401){
-                this.setState({
-                    errorMessage: err.response.data.message,
-                    showError: true,
-                    isBad: true
-                });
-            } else if (String(err).includes('Network Error')){
-                this.setState({
-                    errorMessage: 'Network Error!',
-                    showError: true,
-                    isBad: true
-                });
-            } else {
-                this.setState({
-                    errorMessage: err,
-                    showError: true,
-                    isBad: true
-                });
-            }
-        });
-        
+        if(username.length<5 || password.length<5){
+            this.setState({
+                errorMessage: 'Password and login must be at least 5 characters long.',
+                showError: true,
+                isBad: true
+            });
+        }
+        else{
+            api.get('/login', { headers: { 'Authorization': basicAuth }}).then(res => {
+                setAuthToken(res.data.token);
+                setAuthData({"username": username, "basicAuth": basicAuth, "isAuth": true});
+                this.context.dispatch({type: 'LOGIN', username });
+            }).catch(err => {
+                if(err.response != undefined && err.response.status === 401){
+                    this.setState({
+                        errorMessage: err.response.data.message,
+                        showError: true,
+                        isBad: true
+                    });
+                } else if (String(err).includes('Network Error')){
+                    this.setState({
+                        errorMessage: 'Network Error!',
+                        showError: true,
+                        isBad: true
+                    });
+                } else {
+                    this.setState({
+                        errorMessage: err,
+                        showError: true,
+                        isBad: true
+                    });
+                }
+            });
+        }
     }
 
     
@@ -63,10 +71,17 @@ class LoginScreen extends React.Component {
         console.log('[INFO] POST request | Path: /create_user');
 
         const { username, password } = this.state;
-
-        api.post('/create_user ',
-        {"username": username, "password": password},
-        ).then(res => {
+        if(username.length<5 || password.length<5){
+            this.setState({
+                errorMessage: 'Password and login must be at least 5 characters long.',
+                showError: true,
+                isBad: true
+            });
+        }
+        else{
+            api.post('/create_user ',
+            {"username": username, "password": password},
+            ).then(res => {
             console.log(res.data.message);
             if(String(res.data.message).includes('created')){
                 this.setState({
@@ -82,7 +97,7 @@ class LoginScreen extends React.Component {
                     isBad: true
                 });
             }
-        }).catch(err => {
+            }).catch(err => {
             if (String(err).includes('Network Error')){
                 this.setState({
                     errorMessage: 'Network Error!',
@@ -97,6 +112,7 @@ class LoginScreen extends React.Component {
                 });
             }
         });
+        }
     }
     
     render (){
