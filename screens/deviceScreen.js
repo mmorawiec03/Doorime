@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert, Share } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Modal, Alert } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
 import Card from  '../shared/Card';
@@ -81,14 +81,14 @@ export default function Devices({ navigation }) {
         <FlatList
           ListHeaderComponent={
             <>
-                <ImageBackground source={require('../assets/background-doors_3.jpg')} opacity={0.5} style={globalStyles.header}>
+                <ImageBackground source={require('../assets/devices-background.jpg')} opacity={0.5} style={globalStyles.header}>
                   <Text style={globalStyles.titleText}>{ collection.collectionName && collection.collectionName.toUpperCase() }</Text>
                   <Text style={globalStyles.paragraph}>{ collection.devices.length } devices</Text>
                 </ImageBackground>
                 <LinearGradient
-                                colors={['transparent', '#00b6b6']}
-                                start={[1, 0]} end={[-4, 0]}
-                                >
+                  colors={['transparent', '#00b6b6']}
+                  start={[0.6, 0]} end={[4, 0]}
+                >
                   <TouchableOpacity onPress={() => setAddDevOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                       <Card>
                           <Text style={globalStyles.titleText}>ADD DEVICE</Text>                                            
@@ -117,7 +117,7 @@ export default function Devices({ navigation }) {
               <LinearGradient
                 colors={['transparent', iconColor(item.isClosed)]}
                 start={[0.6, 0]} end={[4, 0]}
-                >
+              >
                 <Card>
                   <View>
                       <Text style={globalStyles.titleText}>{ item.deviceName }</Text>

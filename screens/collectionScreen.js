@@ -302,13 +302,14 @@ class Home extends React.Component {
                         ListHeaderComponent={
                             <>
                                 <View style={globalStyles.header}>
-                                    <ImageBackground source={require('../assets/background-doors.jpg')} style={globalStyles.headerImage} opacity={0.5}>
-                                        <Text style={globalStyles.titleText}>WELCOME <Text style={globalStyles.highlighted}>{this.state.username.toUpperCase()}</Text></Text>
+                                    <ImageBackground source={require('../assets/collections-background.jpg')} style={globalStyles.headerImage} opacity={0.5}>
+                                        <Text style={globalStyles.titleText}>WELCOME {this.state.username.toUpperCase()}</Text>
                                     </ImageBackground>  
                                 </View>
                                 <LinearGradient
-                                colors={['transparent', '#00b6b6']}
-                                start={[1, 0]} end={[-4, 0]}
+                                    colors={['transparent', '#00b6b6']}
+                                    start={[0.6, 0]}
+                                    end={[4, 0]}
                                 >
                                 <TouchableOpacity onPress={() => this.setAddColOpen(true)} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
@@ -347,9 +348,10 @@ class Home extends React.Component {
                         ListFooterComponent={
                             <>
                             <LinearGradient
-                                colors={['transparent', '#FF0000']}
-                                start={[1, 0]} end={[-4, 0]}
-                                >
+                                colors={['transparent', '#b40000']}
+                                start={[0.6, 0]}
+                                end={[4, 0]}
+                            >
                                 <TouchableOpacity onPress={this.deleteUserAlert} onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}>
                                     <Card>
                                         <Text style={globalStyles.titleText}>DELETE ACCOUNT</Text>                                            
