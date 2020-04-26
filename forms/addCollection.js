@@ -9,6 +9,18 @@ import { AuthContext } from '../contexts/authContext';
 import base64 from 'base-64';
 
 
+const replaceDiacritics = (text) => {
+    return text.replace(/ą/g, 'a').replace(/Ą/g, 'A')
+        .replace(/ć/g, 'c').replace(/Ć/g, 'C')
+        .replace(/ę/g, 'e').replace(/Ę/g, 'E')
+        .replace(/ł/g, 'l').replace(/Ł/g, 'L')
+        .replace(/ń/g, 'n').replace(/Ń/g, 'N')
+        .replace(/ó/g, 'o').replace(/Ó/g, 'O')
+        .replace(/ś/g, 's').replace(/Ś/g, 'S')
+        .replace(/ż/g, 'z').replace(/Ż/g, 'Z')
+        .replace(/ź/g, 'z').replace(/Ź/g, 'Z');
+}
+
 const addCollectionSchema = yup.object({
     name: yup
         .string()
@@ -24,10 +36,11 @@ export default function AddCollection({ getUserData }) {
 
     const submitHandler = (name) => {
         console.log('[INFO] PUT request | Path: /add_collection');
+        const colID = base64.encode(replaceDiacritics(authData.username + ':' + name));
         getAuthToken().then(token => {
             api.put(
                 '/add_collection',
-                {"collection": base64.encode(authData.username + ':' + name), "name": name},
+                {"collection": colID, "name": name},
                 { headers: { 'x-access-token': token }}
             ).then(res => {
                 setMessage(res.data.message);
