@@ -31,14 +31,21 @@ class Home extends React.Component {
 
     static contextType = AuthContext;
     
-    infoOpacity = new Animated.Value(0);
-    badInterpolation = this.infoOpacity.interpolate({
+    animationTrigger = new Animated.Value(0);
+    
+    badInterpolation = this.animationTrigger.interpolate({
         inputRange: [0, 1],
         outputRange: ["rgba(0,0,0,0.4)", "rgba(180,0,0,0.4)"]
       });
-    goodInterpolation = this.infoOpacity.interpolate({
+    
+    goodInterpolation = this.animationTrigger.interpolate({
         inputRange: [0, 1],
         outputRange: ["rgba(0,0,0,0.4)", "rgba(0,182,182,0.4)"]
+    });
+    
+    borderInterpolation = this.animationTrigger.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0,4]
     });
     
     interpolationGetter() {
@@ -51,14 +58,14 @@ class Home extends React.Component {
     }
 
     animateDataLoaded() {
-        Animated.timing(this.infoOpacity, {
+        Animated.timing(this.animationTrigger, {
             toValue: 1,
-            duration: 250,
+            duration: 150,
             useNativeDriver: false,
         }).start(() => {
-            Animated.timing(this.infoOpacity, {
+            Animated.timing(this.animationTrigger, {
                 toValue: 0,
-                duration: 250,
+                duration: 600,
                 useNativeDriver: false,
             }).start();
         });
@@ -350,11 +357,11 @@ class Home extends React.Component {
                                 colors={['transparent', '#00b6b6']}
                                 start={[0, 0]} end={[0, 0]}
                                 >
-                                    <View style={globalStyles.header}>
+                                    <Animated.View style={[globalStyles.header, {borderWidth: this.borderInterpolation, borderColor: this.interpolationGetter()}]}>
                                         <ImageBackground source={require('../assets/lock_background_v2.png')} style={globalStyles.headerImage} opacity={0.8}>
                                             <Animated.View style={[globalStyles.darkBackdround, {backgroundColor: this.interpolationGetter()}]}><Text style={globalStyles.welcomeText}>WELCOME {this.state.username.toUpperCase()}</Text></Animated.View>
                                         </ImageBackground>  
-                                    </View>
+                                    </Animated.View>
                                 </LinearGradient>
                                 <LinearGradient
                                     colors={['transparent', '#00b6b6']}
