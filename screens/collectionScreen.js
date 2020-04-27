@@ -1,5 +1,5 @@
 import React  from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Modal, Alert, ImageBackground } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Modal, Alert, ImageBackground, Animated } from 'react-native';
 import { notify, initnotify, getToken } from 'expo-push-notification-helper';
 import { globalStyles } from '../styles/global';
 import { modalFormStyles } from '../styles/modalForm';
@@ -25,10 +25,44 @@ class Home extends React.Component {
         refreshing: false,
         loading: true,
         addColOpen: false,
-        netOpen: false
+        netOpen: false,
+        didDataLoad: false
     }
 
     static contextType = AuthContext;
+    
+    infoOpacity = new Animated.Value(0);
+    badInterpolation = this.infoOpacity.interpolate({
+        inputRange: [0, 1],
+        outputRange: ["rgba(0,0,0,0.4)", "rgba(180,0,0,0.4)"]
+      });
+    goodInterpolation = this.infoOpacity.interpolate({
+        inputRange: [0, 1],
+        outputRange: ["rgba(0,0,0,0.4)", "rgba(0,182,182,0.4)"]
+    });
+    
+    interpolationGetter() {
+        if(this.state.didDataLoad){
+            return this.goodInterpolation;
+        }
+        else{
+            return this.badInterpolation;
+        }
+    }
+
+    animateDataLoaded() {
+        Animated.timing(this.infoOpacity, {
+            toValue: 1,
+            duration: 250,
+            useNativeDriver: false,
+        }).start(() => {
+            Animated.timing(this.infoOpacity, {
+                toValue: 0,
+                duration: 250,
+                useNativeDriver: false,
+            }).start();
+        });
+    }
 
     componentDidMount() {
         this.getUserData();
@@ -183,16 +217,21 @@ class Home extends React.Component {
                     collections: data.user.collections,
                     userNetworks: data.user.networks,
                     refreshing: false,
-                    loading: false
+                    loading: false,
+                    didDataLoad: true
                 });
+                this.animateDataLoaded();
+                
                 if (typeof callback == "function") 
                     callback();
             }).catch(err => {
                 console.log(`[ERROR] ${err}`);
                 this.setState({
                     refreshing: false,
-                    loading: false
+                    loading: false,
+                    didDataLoad: false
                 });
+                this.animateDataLoaded();
             });
         });
     }
@@ -307,11 +346,16 @@ class Home extends React.Component {
                     <FlatList 
                         ListHeaderComponent={
                             <>
-                                <View style={globalStyles.header}>
-                                    <ImageBackground source={require('../assets/lock_background_v2.png')} style={globalStyles.headerImage} opacity={0.8}>
-                                        <View style={globalStyles.darkBackdround}><Text style={globalStyles.welcomeText}>WELCOME {this.state.username.toUpperCase()}</Text></View>
-                                    </ImageBackground>  
-                                </View>
+                                <LinearGradient
+                                colors={['transparent', '#00b6b6']}
+                                start={[0, 0]} end={[0, 0]}
+                                >
+                                    <View style={globalStyles.header}>
+                                        <ImageBackground source={require('../assets/lock_background_v2.png')} style={globalStyles.headerImage} opacity={0.8}>
+                                            <Animated.View style={[globalStyles.darkBackdround, {backgroundColor: this.interpolationGetter()}]}><Text style={globalStyles.welcomeText}>WELCOME {this.state.username.toUpperCase()}</Text></Animated.View>
+                                        </ImageBackground>  
+                                    </View>
+                                </LinearGradient>
                                 <LinearGradient
                                     colors={['transparent', '#00b6b6']}
                                     start={[0.6, 0]} end={[5, 0]}
