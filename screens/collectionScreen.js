@@ -26,7 +26,8 @@ class Home extends React.Component {
         loading: true,
         addColOpen: false,
         netOpen: false,
-        didDataLoad: false
+        didDataLoad: false,
+        refreshDate: ''
     }
 
     static contextType = AuthContext;
@@ -217,6 +218,15 @@ class Home extends React.Component {
                 '/get_all_data',
                 { headers: { 'x-access-token': token }}
             ).then(res => {
+                const dateNow = res.headers.date;
+                if(this.state.refreshDate == dateNow){
+                    throw new Error('Could not get User data.');
+                }
+                else{
+                    this.setState({
+                        refreshDate: dateNow
+                    });
+                }
                 return JSON.parse(res.data.result);
             }).then(data => {
                 this.setState({
@@ -228,7 +238,6 @@ class Home extends React.Component {
                     didDataLoad: true
                 });
                 this.animateDataLoaded();
-                
                 if (typeof callback == "function") 
                     callback();
             }).catch(err => {
